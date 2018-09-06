@@ -14,7 +14,7 @@ set.seed(1212) # sets the random number generator
 n <- 50000  # number of coin flips we want to simulate
 p <- 0.3 # probability of head
 # flip 50000 coins and store the result
-x <- sample(0:1, n, replace = TRUE, prob = c(1 - p, p))
+x <- sample(x = 0:1, size = n, replace = TRUE, prob = c(1 - p, p))
 s <- cumsum(x) # creates a vector that counts the running number of heads
 r <- s/(1:n) # calculates the percentage of heads after trial i
 
@@ -41,7 +41,7 @@ ggplot(data = coin_df, aes(x = toss, y = cumu_prob)) +
 # we can even customize this even more, changing the font, and making it super minimalist:
 ggplot(data = coin_df, aes(x = toss, y = cumu_prob)) + 
   geom_line() + geom_hline(yintercept = p, alpha = .8, color = "red", lwd = 1) + 
-  theme_minimal() + xlim(0, nrow(coin_df)) + ylim(p - .1, p + .1) + 
+  xlim(0, nrow(coin_df)) + ylim(p - .1, p + .1) + 
   labs(title = "Coin-flipping tendencies", x = "Number of flips", 
     y = "Cumulative probability of heads") + 
   theme(panel.background =  element_blank(),  # remove box
@@ -65,7 +65,7 @@ x
 
 x <- rnorm(10)
 x2 <- rnorm(10,mean=10, sd=20)
-par(mfrow = c(1, 2))
+par(mfrow = c(1, 2)) 
 plot(density(x))
 plot(density(x2))
 
@@ -88,7 +88,8 @@ dnorm(0.5,mean=5,sd=1) #value of the density/pdf at x
 x <- seq(-20,20,by=.01)
 y <- dnorm(x) 
 ideal_density <- data.frame(x, y)
-ggplot(data = ideal_density, aes(x, y)) + geom_point(pch = 20, alpha = .1)
+ggplot(data = ideal_density, aes(x, y)) + 
+  geom_point(pch = 20, alpha = .1)
 # pch argument sets the appearance of the points on the plot 
 
 #####################################################################################
@@ -101,6 +102,8 @@ pnorm(2, mean = 0, sd = 1) #.977 probability z is less than 2
 
 1 - pnorm(2, mean = 0, sd = 1) #.022 probability z is > than 2
 pnorm(2, mean = 0, sd = 1, lower.tail=F) #same thing
+pnorm(0, mean = 0, sd = 1)
+pnorm(0, mean = 0, sd = 1, lower.tail = FALSE)
 
 #probability b/t 0 and 2
 great0 <- 1 - pnorm(0, mean = 0, sd = 1) #probability greater than 0
@@ -110,7 +113,7 @@ less2-great0 #probability b/t 0 and 2
 ###############################################################################
 
 qnorm(0.5) # reverse of the CDF, feed it a probability and it tells you the corresponding z-score
-x <- seq(0,1,by=.05)
+x <- seq(0,1,by=.01)
 y <- qnorm(x)
 plot(x,y)
 
@@ -143,7 +146,7 @@ qnorm(0.005, mean = 0, sd = 1, lower.tail=FALSE)
 # runif()
 # rpois()
 # rgamma()
-
+sum(rbinom(n = 100, size = 1, .5))
 #quantile function for a chi-squared distribution with 4 degrees of freedom
 qchisq(.9, df = 4)
 chi <- rchisq(5000, df = 4)
