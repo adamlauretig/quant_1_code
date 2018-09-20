@@ -26,7 +26,7 @@ There are five basic data structures in R: vectors, matrices, arrays, lists, and
 
 Up to this point, we've primarily *talked* about vectors. We've encountered other data types, but haven't used them. Vectors have length, but no width (they can only represent one variable at a time). Matrices are just collections of vectors (exactly like you learned in math camp). We can combine them by column using \texttt{cbind}, or by row, using \texttt{rbind}. We then access elements of matrix by \texttt{matrix[row, column]}.
 
-```{r, first_matrix_cell}
+```{r, matrix1, echo = TRUE, cache = TRUE}
 vap <- voting.age.population <- c(3481823, 496387, 4582842, 2120139,26955438,3617942,2673154,652189,472143,14085749,6915512,995937,1073799,9600372,4732010,2265860,2068253,3213141,3188765,1033632,4242214,4997677,7620982,3908159,2139918,4426278,731365,1321923,1870315,1012033,6598368,1452962,14838076,6752018,494923,8697456,2697855,2850525,9612380,824854,3303593,594599,4636679,17038979,1797941,487900,5841335,4876661,1421717,4257230,392344)
 
 total.votes <- tv <- c(NA, 238307, 1553032, 780409,8899059,1586105, 1162391,258053, 122356,4884544, 2143845,348988, 458927,3586292, 1719351,1071509, 864083,1370062, 954896,NA, 1809237, 2243835,3852008, 2217552,NA, 2178278, 411061,610499, 586274,418550, 2315643,568597, 4703830,2036451, 220479,4184072, NA,1399650, NA,392882, 1117311,341105, 1868363,NA, 582561, 263025,2398589, 2085074,473014, 2183155, 196217)
@@ -40,5 +40,160 @@ m2[1,1:10]
 m2[1:2, 1:10]
 m2[, 1:10] # same as previous line since there are only two rows.
 class(m2)
+```
+
+However, we can also create matrices directly, we don't need to create vectors first:
+
+```{r, matrix2, echo = TRUE}
+
+#Another way to specify a matrix
+matrix(1:10, nrow = 5)
+matrix(1:10, ncol = 2) #the same
+matrix(1:10, nrow = 5, ncol = 2) # the same
+matrix(1:10, nrow = 5, byrow = TRUE) ## not the same
+
+```
+
+By default, R will fill each column of a matrix, and then move to the next one. If you specify \texttt{byrow = TRUE}, however, R will fill each row, and then move onto the next one. 
+
+## Arrays and attributes
+
+Arrays are a more general way to store data. Where a matrix can only have 2 dimensions (rows and columns), arrays can have an arbitrary number of dimensions, but this *will* increase the amount of memory they consume. 
+
+Let's examine a cube of dimensions $3 \times 4 \times 2$. One way of thinking of this is two $3 \times 4$ matrices stacked on top of each other:
+
+```{r, array1, echo = TRUE}
+a <- array(1:24, dim = c(3, 4, 2))
+a
+```
+
+Since this array has three dimensions, there are now three indices we can use to access the array:
+
+```{r, array2, echo = TRUE}
+a[, , 1]
+a[, 1, ]
+a[1, , ]
+a[1, 1, ]
+a[, 1, 1]
+a[1, 1, 1]
+
+```
+
+
+Notice that the 'dim' is asssigned.  This is an "attribute" of the array; attributes are some piece of data associated with the structure that isn't the data itself, and are used to make working with these data easier.
+```{r, array3, echo = TRUE}
+
+dim(a) 
+attributes(a)
+str(a)
+
+```
+
+
+
+Matrices also have this attribute (\texttt{dim}), and also have and attribute \texttt{dimnames()}, which are strings (technically lists of strings, but we'll get to that in a minute), which allow you to label your observations.
+ 
+```{r, matrix3, echo = TRUE}
+
+dim(m1) # number of rows, number of columns
+attributes(m1) # there is another attribute here -- the columns have names
+dimnames(m1) # we can either assign or get the dimnames attribute
+# The first part is the rownames (which we didn't assign)
+dimnames(m2) # here the columns have no names
+dimnames(m1)[[2]][1]<-"Dracula"
+head(m1) # We have re-named the first column to have the name "Dracula"
+dimnames(m1)[[2]][1]<-"vap" # all of this bracketing is because this is a list ... what's a list?
+head(m1)
+```
+
+
+R is flexible, and there are multiple ways to access dimnames:
+
+```{r, matrix4}
+
+# Another way to do this
+colnames(m1)
+# How would we rename the first column?
+colnames(m2)
+rownames(m1)
+rownames(m2)
+
+```
+
+
+## Lists
+
+One downside to matrices and vectors is that every element in them must be the same type (all numerics, or all intergers, or all character vectors).  Lists offer a way around this restriction, they can combine multiple data types. Lists are a very flexible way to store data, and are maybe the most common data structure you'll encounter: many functions produce lists.
+
+```{r, lists1, echo = TRUE, cache = TRUE}
+
+list.a <- list(m1, vap, 3) # m1 is a matrix, vap is a vector, 3 is an integer
+list.a
+
+```
+
+
+We can make all sorts of lists, and can even create lists containing other lists!
+
+```{r, lists2, echo = TRUE, cache = TRUE}
+
+vector1 <- c(1,2,3)
+gospels <- c("matthew","mark","luke", "john")
+my.matrix <- matrix(c(1:20), nrow=4)
+my.data <- data.frame(cbind(vap, tv))
+my.crazy.list <- list(vector1, gospels, my.matrix, TRUE, list.a)
+my.crazy.list # we can combine anything we want -- we can even include other lists in our lists
+
+```
+
+What if we want to access the attributes of our list?
+
+```{r, lists3, echo = TRUE}
+
+str(my.crazy.list) # the str() function is useful for looking at the basic components 
+# of any complicated object like this
+#str() will work with most types of objects
+
+attributes(my.crazy.list) # lists has attributes, but we haven't set them
+length(my.crazy.list) # this reports the number of major sub-elements in the list
+dim(my.crazy.list) # this won't work for complicated lists
+names(my.crazy.list) <- c("one", "two", "three", "four", "five")
+str(my.crazy.list) # now each part of the list has a name attribute
+my.crazy.list
+
+```
+
+But this can be quite convoluted. Instead, when we create our list, we can give each element a name:
+```{r, lists4, echo = TRUE, cache = TRUE}
+my.crazy.list <- list(one=vector1,two=gospels, three=my.matrix, four=TRUE, five=list.a)
+str(my.crazy.list)
+names(my.crazy.list)
+```
+
+Manipulating lists is similar to other manipulations in R, the new one is using double brackets \texttt{[[]]} to access an element of a list.
+
+```{r, lists5, echo = TRUE}
+
+# there are several ways to access/add to/subtract from a list
+my.crazy.list[[1]]
+my.crazy.list$one
+my.crazy.list[1]
+my.crazy.list["one"]
+my.crazy.list$dracula <- "dracula"
+my.crazy.list # now we have added another element
+
+
+# We can repeat this accessing method
+my.crazy.list[[3]][1,] # first row of my.matrix
+my.matrix[1,]  #the same
+
+```
+
+However, you cannot do math on lists directly (note that this is set to `eval = FALSE`, since if we ran it, it throws an error and the document doesn't compile):
+
+```{r, lists6, echo = TRUE, eval = FALSE}
+
+my.crazy.list +2 # not so much
+my.crazy.list[[3]] + 2
 ```
 

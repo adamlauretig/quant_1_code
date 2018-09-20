@@ -249,5 +249,921 @@ row, using \texttt{rbind}. We then access elements of matrix by
 ## [1] "matrix"
 \end{verbatim}
 
+However, we can also create matrices directly, we don't need to create
+vectors first:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#Another way to specify a matrix}
+\KeywordTok{matrix}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\DecValTok{10}\NormalTok{, }\DataTypeTok{nrow =} \DecValTok{5}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##      [,1] [,2]
+## [1,]    1    6
+## [2,]    2    7
+## [3,]    3    8
+## [4,]    4    9
+## [5,]    5   10
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{matrix}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\DecValTok{10}\NormalTok{, }\DataTypeTok{ncol =} \DecValTok{2}\NormalTok{) }\CommentTok{#the same}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##      [,1] [,2]
+## [1,]    1    6
+## [2,]    2    7
+## [3,]    3    8
+## [4,]    4    9
+## [5,]    5   10
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{matrix}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\DecValTok{10}\NormalTok{, }\DataTypeTok{nrow =} \DecValTok{5}\NormalTok{, }\DataTypeTok{ncol =} \DecValTok{2}\NormalTok{) }\CommentTok{# the same}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##      [,1] [,2]
+## [1,]    1    6
+## [2,]    2    7
+## [3,]    3    8
+## [4,]    4    9
+## [5,]    5   10
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{matrix}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\DecValTok{10}\NormalTok{, }\DataTypeTok{nrow =} \DecValTok{5}\NormalTok{, }\DataTypeTok{byrow =} \OtherTok{TRUE}\NormalTok{) ## not the same}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##      [,1] [,2]
+## [1,]    1    2
+## [2,]    3    4
+## [3,]    5    6
+## [4,]    7    8
+## [5,]    9   10
+\end{verbatim}
+
+By default, R will fill each column of a matrix, and then move to the
+next one. If you specify \texttt{byrow = TRUE}, however, R will fill
+each row, and then move onto the next one.
+
+\subsection{Arrays and attributes}\label{arrays-and-attributes}
+
+Arrays are a more general way to store data. Where a matrix can only
+have 2 dimensions (rows and columns), arrays can have an arbitrary
+number of dimensions, but this \emph{will} increase the amount of memory
+they consume.
+
+Let's examine a cube of dimensions \(3 \times 4 \times 2\). One way of
+thinking of this is two \(3 \times 4\) matrices stacked on top of each
+other:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{a <-}\StringTok{ }\KeywordTok{array}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\DecValTok{24}\NormalTok{, }\DataTypeTok{dim =} \KeywordTok{c}\NormalTok{(}\DecValTok{3}\NormalTok{, }\DecValTok{4}\NormalTok{, }\DecValTok{2}\NormalTok{))}
+\NormalTok{a}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## , , 1
+## 
+##      [,1] [,2] [,3] [,4]
+## [1,]    1    4    7   10
+## [2,]    2    5    8   11
+## [3,]    3    6    9   12
+## 
+## , , 2
+## 
+##      [,1] [,2] [,3] [,4]
+## [1,]   13   16   19   22
+## [2,]   14   17   20   23
+## [3,]   15   18   21   24
+\end{verbatim}
+
+Since this array has three dimensions, there are now three indices we
+can use to access the array:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{a[, , }\DecValTok{1}\NormalTok{]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##      [,1] [,2] [,3] [,4]
+## [1,]    1    4    7   10
+## [2,]    2    5    8   11
+## [3,]    3    6    9   12
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{a[, }\DecValTok{1}\NormalTok{, ]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##      [,1] [,2]
+## [1,]    1   13
+## [2,]    2   14
+## [3,]    3   15
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{a[}\DecValTok{1}\NormalTok{, , ]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##      [,1] [,2]
+## [1,]    1   13
+## [2,]    4   16
+## [3,]    7   19
+## [4,]   10   22
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{a[}\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{, ]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1]  1 13
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{a[, }\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 1 2 3
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{a[}\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 1
+\end{verbatim}
+
+Notice that the `dim' is asssigned. This is an ``attribute'' of the
+array; attributes are some piece of data associated with the structure
+that isn't the data itself, and are used to make working with these data
+easier.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{dim}\NormalTok{(a) }
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 3 4 2
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{attributes}\NormalTok{(a)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## $dim
+## [1] 3 4 2
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{str}\NormalTok{(a)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##  int [1:3, 1:4, 1:2] 1 2 3 4 5 6 7 8 9 10 ...
+\end{verbatim}
+
+Matrices also have this attribute (\texttt{dim}), and also have and
+attribute \texttt{dimnames()}, which are strings (technically lists of
+strings, but we'll get to that in a minute), which allow you to label
+your observations.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{dim}\NormalTok{(m1) }\CommentTok{# number of rows, number of columns}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 51  2
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{attributes}\NormalTok{(m1) }\CommentTok{# there is another attribute here -- the columns have names}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## $dim
+## [1] 51  2
+## 
+## $dimnames
+## $dimnames[[1]]
+## NULL
+## 
+## $dimnames[[2]]
+## [1] "vap" "tv"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{dimnames}\NormalTok{(m1) }\CommentTok{# we can either assign or get the dimnames attribute}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [[1]]
+## NULL
+## 
+## [[2]]
+## [1] "vap" "tv"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# The first part is the rownames (which we didn't assign)}
+\KeywordTok{dimnames}\NormalTok{(m2) }\CommentTok{# here the columns have no names}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [[1]]
+## [1] "vap" "tv" 
+## 
+## [[2]]
+## NULL
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{dimnames}\NormalTok{(m1)[[}\DecValTok{2}\NormalTok{]][}\DecValTok{1}\NormalTok{]<-}\StringTok{"Dracula"}
+\KeywordTok{head}\NormalTok{(m1) }\CommentTok{# We have re-named the first column to have the name "Dracula"}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##       Dracula      tv
+## [1,]  3481823      NA
+## [2,]   496387  238307
+## [3,]  4582842 1553032
+## [4,]  2120139  780409
+## [5,] 26955438 8899059
+## [6,]  3617942 1586105
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{dimnames}\NormalTok{(m1)[[}\DecValTok{2}\NormalTok{]][}\DecValTok{1}\NormalTok{]<-}\StringTok{"vap"} \CommentTok{# all of this bracketing is because this is a list ... what's a list?}
+\KeywordTok{head}\NormalTok{(m1)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##           vap      tv
+## [1,]  3481823      NA
+## [2,]   496387  238307
+## [3,]  4582842 1553032
+## [4,]  2120139  780409
+## [5,] 26955438 8899059
+## [6,]  3617942 1586105
+\end{verbatim}
+
+R is flexible, and there are multiple ways to access dimnames:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Another way to do this}
+\KeywordTok{colnames}\NormalTok{(m1)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "vap" "tv"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# How would we rename the first column?}
+\KeywordTok{colnames}\NormalTok{(m2)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## NULL
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{rownames}\NormalTok{(m1)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## NULL
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{rownames}\NormalTok{(m2)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "vap" "tv"
+\end{verbatim}
+
+\subsection{Lists}\label{lists}
+
+One downside to matrices and vectors is that every element in them must
+be the same type (all numerics, or all intergers, or all character
+vectors). Lists offer a way around this restriction, they can combine
+multiple data types. Lists are a very flexible way to store data, and
+are maybe the most common data structure you'll encounter: many
+functions produce lists.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{list.a <-}\StringTok{ }\KeywordTok{list}\NormalTok{(m1, vap, }\DecValTok{3}\NormalTok{) }\CommentTok{# m1 is a matrix, vap is a vector, 3 is an integer}
+\NormalTok{list.a}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [[1]]
+##            vap      tv
+##  [1,]  3481823      NA
+##  [2,]   496387  238307
+##  [3,]  4582842 1553032
+##  [4,]  2120139  780409
+##  [5,] 26955438 8899059
+##  [6,]  3617942 1586105
+##  [7,]  2673154 1162391
+##  [8,]   652189  258053
+##  [9,]   472143  122356
+## [10,] 14085749 4884544
+## [11,]  6915512 2143845
+## [12,]   995937  348988
+## [13,]  1073799  458927
+## [14,]  9600372 3586292
+## [15,]  4732010 1719351
+## [16,]  2265860 1071509
+## [17,]  2068253  864083
+## [18,]  3213141 1370062
+## [19,]  3188765  954896
+## [20,]  1033632      NA
+## [21,]  4242214 1809237
+## [22,]  4997677 2243835
+## [23,]  7620982 3852008
+## [24,]  3908159 2217552
+## [25,]  2139918      NA
+## [26,]  4426278 2178278
+## [27,]   731365  411061
+## [28,]  1321923  610499
+## [29,]  1870315  586274
+## [30,]  1012033  418550
+## [31,]  6598368 2315643
+## [32,]  1452962  568597
+## [33,] 14838076 4703830
+## [34,]  6752018 2036451
+## [35,]   494923  220479
+## [36,]  8697456 4184072
+## [37,]  2697855      NA
+## [38,]  2850525 1399650
+## [39,]  9612380      NA
+## [40,]   824854  392882
+## [41,]  3303593 1117311
+## [42,]   594599  341105
+## [43,]  4636679 1868363
+## [44,] 17038979      NA
+## [45,]  1797941  582561
+## [46,]   487900  263025
+## [47,]  5841335 2398589
+## [48,]  4876661 2085074
+## [49,]  1421717  473014
+## [50,]  4257230 2183155
+## [51,]   392344  196217
+## 
+## [[2]]
+##  [1]  3481823   496387  4582842  2120139 26955438  3617942  2673154
+##  [8]   652189   472143 14085749  6915512   995937  1073799  9600372
+## [15]  4732010  2265860  2068253  3213141  3188765  1033632  4242214
+## [22]  4997677  7620982  3908159  2139918  4426278   731365  1321923
+## [29]  1870315  1012033  6598368  1452962 14838076  6752018   494923
+## [36]  8697456  2697855  2850525  9612380   824854  3303593   594599
+## [43]  4636679 17038979  1797941   487900  5841335  4876661  1421717
+## [50]  4257230   392344
+## 
+## [[3]]
+## [1] 3
+\end{verbatim}
+
+We can make all sorts of lists, and can even create lists containing
+other lists!
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{vector1 <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{)}
+\NormalTok{gospels <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"matthew"}\NormalTok{,}\StringTok{"mark"}\NormalTok{,}\StringTok{"luke"}\NormalTok{, }\StringTok{"john"}\NormalTok{)}
+\NormalTok{my.matrix <-}\StringTok{ }\KeywordTok{matrix}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\DecValTok{20}\NormalTok{), }\DataTypeTok{nrow=}\DecValTok{4}\NormalTok{)}
+\NormalTok{my.data <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(}\KeywordTok{cbind}\NormalTok{(vap, tv))}
+\NormalTok{my.crazy.list <-}\StringTok{ }\KeywordTok{list}\NormalTok{(vector1, gospels, my.matrix, }\OtherTok{TRUE}\NormalTok{, list.a)}
+\NormalTok{my.crazy.list }\CommentTok{# we can combine anything we want -- we can even include other lists in our lists}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [[1]]
+## [1] 1 2 3
+## 
+## [[2]]
+## [1] "matthew" "mark"    "luke"    "john"   
+## 
+## [[3]]
+##      [,1] [,2] [,3] [,4] [,5]
+## [1,]    1    5    9   13   17
+## [2,]    2    6   10   14   18
+## [3,]    3    7   11   15   19
+## [4,]    4    8   12   16   20
+## 
+## [[4]]
+## [1] TRUE
+## 
+## [[5]]
+## [[5]][[1]]
+##            vap      tv
+##  [1,]  3481823      NA
+##  [2,]   496387  238307
+##  [3,]  4582842 1553032
+##  [4,]  2120139  780409
+##  [5,] 26955438 8899059
+##  [6,]  3617942 1586105
+##  [7,]  2673154 1162391
+##  [8,]   652189  258053
+##  [9,]   472143  122356
+## [10,] 14085749 4884544
+## [11,]  6915512 2143845
+## [12,]   995937  348988
+## [13,]  1073799  458927
+## [14,]  9600372 3586292
+## [15,]  4732010 1719351
+## [16,]  2265860 1071509
+## [17,]  2068253  864083
+## [18,]  3213141 1370062
+## [19,]  3188765  954896
+## [20,]  1033632      NA
+## [21,]  4242214 1809237
+## [22,]  4997677 2243835
+## [23,]  7620982 3852008
+## [24,]  3908159 2217552
+## [25,]  2139918      NA
+## [26,]  4426278 2178278
+## [27,]   731365  411061
+## [28,]  1321923  610499
+## [29,]  1870315  586274
+## [30,]  1012033  418550
+## [31,]  6598368 2315643
+## [32,]  1452962  568597
+## [33,] 14838076 4703830
+## [34,]  6752018 2036451
+## [35,]   494923  220479
+## [36,]  8697456 4184072
+## [37,]  2697855      NA
+## [38,]  2850525 1399650
+## [39,]  9612380      NA
+## [40,]   824854  392882
+## [41,]  3303593 1117311
+## [42,]   594599  341105
+## [43,]  4636679 1868363
+## [44,] 17038979      NA
+## [45,]  1797941  582561
+## [46,]   487900  263025
+## [47,]  5841335 2398589
+## [48,]  4876661 2085074
+## [49,]  1421717  473014
+## [50,]  4257230 2183155
+## [51,]   392344  196217
+## 
+## [[5]][[2]]
+##  [1]  3481823   496387  4582842  2120139 26955438  3617942  2673154
+##  [8]   652189   472143 14085749  6915512   995937  1073799  9600372
+## [15]  4732010  2265860  2068253  3213141  3188765  1033632  4242214
+## [22]  4997677  7620982  3908159  2139918  4426278   731365  1321923
+## [29]  1870315  1012033  6598368  1452962 14838076  6752018   494923
+## [36]  8697456  2697855  2850525  9612380   824854  3303593   594599
+## [43]  4636679 17038979  1797941   487900  5841335  4876661  1421717
+## [50]  4257230   392344
+## 
+## [[5]][[3]]
+## [1] 3
+\end{verbatim}
+
+What if we want to access the attributes of our list?
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{str}\NormalTok{(my.crazy.list) }\CommentTok{# the str() function is useful for looking at the basic components }
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## List of 5
+##  $ : num [1:3] 1 2 3
+##  $ : chr [1:4] "matthew" "mark" "luke" "john"
+##  $ : int [1:4, 1:5] 1 2 3 4 5 6 7 8 9 10 ...
+##  $ : logi TRUE
+##  $ :List of 3
+##   ..$ : num [1:51, 1:2] 3481823 496387 4582842 2120139 26955438 ...
+##   .. ..- attr(*, "dimnames")=List of 2
+##   .. .. ..$ : NULL
+##   .. .. ..$ : chr [1:2] "vap" "tv"
+##   ..$ : num [1:51] 3481823 496387 4582842 2120139 26955438 ...
+##   ..$ : num 3
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# of any complicated object like this}
+\CommentTok{#str() will work with most types of objects}
+
+\KeywordTok{attributes}\NormalTok{(my.crazy.list) }\CommentTok{# lists has attributes, but we haven't set them}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## NULL
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{length}\NormalTok{(my.crazy.list) }\CommentTok{# this reports the number of major sub-elements in the list}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 5
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{dim}\NormalTok{(my.crazy.list) }\CommentTok{# this won't work for complicated lists}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## NULL
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{names}\NormalTok{(my.crazy.list) <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"one"}\NormalTok{, }\StringTok{"two"}\NormalTok{, }\StringTok{"three"}\NormalTok{, }\StringTok{"four"}\NormalTok{, }\StringTok{"five"}\NormalTok{)}
+\KeywordTok{str}\NormalTok{(my.crazy.list) }\CommentTok{# now each part of the list has a name attribute}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## List of 5
+##  $ one  : num [1:3] 1 2 3
+##  $ two  : chr [1:4] "matthew" "mark" "luke" "john"
+##  $ three: int [1:4, 1:5] 1 2 3 4 5 6 7 8 9 10 ...
+##  $ four : logi TRUE
+##  $ five :List of 3
+##   ..$ : num [1:51, 1:2] 3481823 496387 4582842 2120139 26955438 ...
+##   .. ..- attr(*, "dimnames")=List of 2
+##   .. .. ..$ : NULL
+##   .. .. ..$ : chr [1:2] "vap" "tv"
+##   ..$ : num [1:51] 3481823 496387 4582842 2120139 26955438 ...
+##   ..$ : num 3
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{my.crazy.list}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## $one
+## [1] 1 2 3
+## 
+## $two
+## [1] "matthew" "mark"    "luke"    "john"   
+## 
+## $three
+##      [,1] [,2] [,3] [,4] [,5]
+## [1,]    1    5    9   13   17
+## [2,]    2    6   10   14   18
+## [3,]    3    7   11   15   19
+## [4,]    4    8   12   16   20
+## 
+## $four
+## [1] TRUE
+## 
+## $five
+## $five[[1]]
+##            vap      tv
+##  [1,]  3481823      NA
+##  [2,]   496387  238307
+##  [3,]  4582842 1553032
+##  [4,]  2120139  780409
+##  [5,] 26955438 8899059
+##  [6,]  3617942 1586105
+##  [7,]  2673154 1162391
+##  [8,]   652189  258053
+##  [9,]   472143  122356
+## [10,] 14085749 4884544
+## [11,]  6915512 2143845
+## [12,]   995937  348988
+## [13,]  1073799  458927
+## [14,]  9600372 3586292
+## [15,]  4732010 1719351
+## [16,]  2265860 1071509
+## [17,]  2068253  864083
+## [18,]  3213141 1370062
+## [19,]  3188765  954896
+## [20,]  1033632      NA
+## [21,]  4242214 1809237
+## [22,]  4997677 2243835
+## [23,]  7620982 3852008
+## [24,]  3908159 2217552
+## [25,]  2139918      NA
+## [26,]  4426278 2178278
+## [27,]   731365  411061
+## [28,]  1321923  610499
+## [29,]  1870315  586274
+## [30,]  1012033  418550
+## [31,]  6598368 2315643
+## [32,]  1452962  568597
+## [33,] 14838076 4703830
+## [34,]  6752018 2036451
+## [35,]   494923  220479
+## [36,]  8697456 4184072
+## [37,]  2697855      NA
+## [38,]  2850525 1399650
+## [39,]  9612380      NA
+## [40,]   824854  392882
+## [41,]  3303593 1117311
+## [42,]   594599  341105
+## [43,]  4636679 1868363
+## [44,] 17038979      NA
+## [45,]  1797941  582561
+## [46,]   487900  263025
+## [47,]  5841335 2398589
+## [48,]  4876661 2085074
+## [49,]  1421717  473014
+## [50,]  4257230 2183155
+## [51,]   392344  196217
+## 
+## $five[[2]]
+##  [1]  3481823   496387  4582842  2120139 26955438  3617942  2673154
+##  [8]   652189   472143 14085749  6915512   995937  1073799  9600372
+## [15]  4732010  2265860  2068253  3213141  3188765  1033632  4242214
+## [22]  4997677  7620982  3908159  2139918  4426278   731365  1321923
+## [29]  1870315  1012033  6598368  1452962 14838076  6752018   494923
+## [36]  8697456  2697855  2850525  9612380   824854  3303593   594599
+## [43]  4636679 17038979  1797941   487900  5841335  4876661  1421717
+## [50]  4257230   392344
+## 
+## $five[[3]]
+## [1] 3
+\end{verbatim}
+
+But this can be quite convoluted. Instead, when we create our list, we
+can give each element a name:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{my.crazy.list <-}\StringTok{ }\KeywordTok{list}\NormalTok{(}\DataTypeTok{one=}\NormalTok{vector1,}\DataTypeTok{two=}\NormalTok{gospels, }\DataTypeTok{three=}\NormalTok{my.matrix, }\DataTypeTok{four=}\OtherTok{TRUE}\NormalTok{, }\DataTypeTok{five=}\NormalTok{list.a)}
+\KeywordTok{str}\NormalTok{(my.crazy.list)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## List of 5
+##  $ one  : num [1:3] 1 2 3
+##  $ two  : chr [1:4] "matthew" "mark" "luke" "john"
+##  $ three: int [1:4, 1:5] 1 2 3 4 5 6 7 8 9 10 ...
+##  $ four : logi TRUE
+##  $ five :List of 3
+##   ..$ : num [1:51, 1:2] 3481823 496387 4582842 2120139 26955438 ...
+##   .. ..- attr(*, "dimnames")=List of 2
+##   .. .. ..$ : NULL
+##   .. .. ..$ : chr [1:2] "vap" "tv"
+##   ..$ : num [1:51] 3481823 496387 4582842 2120139 26955438 ...
+##   ..$ : num 3
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{names}\NormalTok{(my.crazy.list)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "one"   "two"   "three" "four"  "five"
+\end{verbatim}
+
+Manipulating lists is similar to other manipulations in R, the new one
+is using double brackets \texttt{[[]]} to access an element of a list.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# there are several ways to access/add to/subtract from a list}
+\NormalTok{my.crazy.list[[}\DecValTok{1}\NormalTok{]]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 1 2 3
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{my.crazy.list}\OperatorTok{$}\NormalTok{one}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 1 2 3
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{my.crazy.list[}\DecValTok{1}\NormalTok{]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## $one
+## [1] 1 2 3
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{my.crazy.list[}\StringTok{"one"}\NormalTok{]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## $one
+## [1] 1 2 3
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{my.crazy.list}\OperatorTok{$}\NormalTok{dracula <-}\StringTok{ "dracula"}
+\NormalTok{my.crazy.list }\CommentTok{# now we have added another element}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## $one
+## [1] 1 2 3
+## 
+## $two
+## [1] "matthew" "mark"    "luke"    "john"   
+## 
+## $three
+##      [,1] [,2] [,3] [,4] [,5]
+## [1,]    1    5    9   13   17
+## [2,]    2    6   10   14   18
+## [3,]    3    7   11   15   19
+## [4,]    4    8   12   16   20
+## 
+## $four
+## [1] TRUE
+## 
+## $five
+## $five[[1]]
+##            vap      tv
+##  [1,]  3481823      NA
+##  [2,]   496387  238307
+##  [3,]  4582842 1553032
+##  [4,]  2120139  780409
+##  [5,] 26955438 8899059
+##  [6,]  3617942 1586105
+##  [7,]  2673154 1162391
+##  [8,]   652189  258053
+##  [9,]   472143  122356
+## [10,] 14085749 4884544
+## [11,]  6915512 2143845
+## [12,]   995937  348988
+## [13,]  1073799  458927
+## [14,]  9600372 3586292
+## [15,]  4732010 1719351
+## [16,]  2265860 1071509
+## [17,]  2068253  864083
+## [18,]  3213141 1370062
+## [19,]  3188765  954896
+## [20,]  1033632      NA
+## [21,]  4242214 1809237
+## [22,]  4997677 2243835
+## [23,]  7620982 3852008
+## [24,]  3908159 2217552
+## [25,]  2139918      NA
+## [26,]  4426278 2178278
+## [27,]   731365  411061
+## [28,]  1321923  610499
+## [29,]  1870315  586274
+## [30,]  1012033  418550
+## [31,]  6598368 2315643
+## [32,]  1452962  568597
+## [33,] 14838076 4703830
+## [34,]  6752018 2036451
+## [35,]   494923  220479
+## [36,]  8697456 4184072
+## [37,]  2697855      NA
+## [38,]  2850525 1399650
+## [39,]  9612380      NA
+## [40,]   824854  392882
+## [41,]  3303593 1117311
+## [42,]   594599  341105
+## [43,]  4636679 1868363
+## [44,] 17038979      NA
+## [45,]  1797941  582561
+## [46,]   487900  263025
+## [47,]  5841335 2398589
+## [48,]  4876661 2085074
+## [49,]  1421717  473014
+## [50,]  4257230 2183155
+## [51,]   392344  196217
+## 
+## $five[[2]]
+##  [1]  3481823   496387  4582842  2120139 26955438  3617942  2673154
+##  [8]   652189   472143 14085749  6915512   995937  1073799  9600372
+## [15]  4732010  2265860  2068253  3213141  3188765  1033632  4242214
+## [22]  4997677  7620982  3908159  2139918  4426278   731365  1321923
+## [29]  1870315  1012033  6598368  1452962 14838076  6752018   494923
+## [36]  8697456  2697855  2850525  9612380   824854  3303593   594599
+## [43]  4636679 17038979  1797941   487900  5841335  4876661  1421717
+## [50]  4257230   392344
+## 
+## $five[[3]]
+## [1] 3
+## 
+## 
+## $dracula
+## [1] "dracula"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# We can repeat this accessing method}
+\NormalTok{my.crazy.list[[}\DecValTok{3}\NormalTok{]][}\DecValTok{1}\NormalTok{,] }\CommentTok{# first row of my.matrix}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1]  1  5  9 13 17
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{my.matrix[}\DecValTok{1}\NormalTok{,]  }\CommentTok{#the same}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1]  1  5  9 13 17
+\end{verbatim}
+
+However, you cannot do math on lists directly (note that this is set to
+\texttt{eval\ =\ FALSE}, since if we ran it, it throws an error and the
+document doesn't compile):
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{my.crazy.list }\OperatorTok{+}\DecValTok{2} \CommentTok{# not so much}
+\NormalTok{my.crazy.list[[}\DecValTok{3}\NormalTok{]] }\OperatorTok{+}\StringTok{ }\DecValTok{2}
+\end{Highlighting}
+\end{Shaded}
+
 
 \end{document}
