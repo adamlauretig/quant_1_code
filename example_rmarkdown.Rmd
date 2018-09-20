@@ -1,0 +1,177 @@
+---
+title: "Example Rmarkdown Notebook"
+author: "Adam Lauretig"
+date: \today
+output:
+  pdf_document: 
+    keep_tex: yes # save the raw output
+  citation_package: natbib # used for citations
+  fig_caption: true # allows us to put captions on the figures
+  latex_engine: pdflatex
+  template: tex_template.tex # how the document is formatted
+  html_document: default
+header-includes:
+  - \usepackage{palatino} # a font package
+#  - \usepackage{times} # a font package
+  - \usepackage{graphicx}
+  - \usepackage{scrextend}
+
+---
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>. To produce the output, click "Knit", next to the magnifying glass.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars, cache = TRUE}
+summary(cars)
+```
+
+When you examine the chunk, you see that the first line has several things going on. You can generate a new chunk with 
+It begins with \`\`\`, which marks the beginning of a code chunk. You can create your own new code chunk by clicking "insert," and then selecting `R`.  The chunk first tells you that it is `r` code, then has a name, "cars." I would recommend giving your code chunks informative names, and making sure these names are unique. `cache = TRUE` tells R to save the results, so that once we run the code once, we won't have to re-run it every time (as long as we don't change anything).
+
+If we don't want our code chunk to be visible (we only want to see the results), we can include another flag in the header, `echo = FALSE`, which tells R to run the code, but to only display the results.
+
+```{r cars_echo_false, cache = TRUE, echo = FALSE}
+summary(cars)
+
+```
+
+If we want to display code which we won't run (such as homework code that you can't get to work, but include for partial credit), you can add an `eval = FALSE` flag to your code chunk.
+
+```{r, bad_code, eval = FALSE }
+This code will not run. 
+```
+
+
+Generally, for homework assignments, you will use the `echo = FALSE` flag, and just display your output. You should also use the `cache = TRUE` flag, so that you won't have to re-run all of your code every time.
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+library(ggplot2) # calling the ggplot2 library
+data("pressure") # a dataset built into R
+ggplot(data = pressure, aes(x = temperature, y = pressure)) + geom_line()
+```
+
+We'll use `echo = FALSE`, so that we only see the plot. However, we may want to add a caption to the image, so that we can describe what we'll see. We can put this in the header:
+
+```{r pressure_cap, echo=FALSE, fig.cap = "Plotting Temperature vs. Pressure"}
+library(ggplot2) # calling the ggplot2 library
+data("pressure") # a dataset built into R
+ggplot(data = pressure, aes(x = temperature, y = pressure)) + geom_line()
+```
+
+But this figure is pretty big. We can adjust the size with a few more flags in the header. Using `fig.width = 3, fig.height= 2`, we'll tell `R` we want a $4\times3$ inch figure for our plot.
+
+```{r pressure_cap_size, echo=FALSE, fig.cap = "Plotting Temperature vs. Pressure", fig.width = 3, fig.height = 2}
+library(ggplot2) # calling the ggplot2 library
+data("pressure") # a dataset built into R
+ggplot(data = pressure, aes(x = temperature, y = pressure)) + geom_line()
+```
+
+We can include links to figures in the text of the document, which is helpful when writing analysis, we'll add text to the caption, so that we can reference figure \ref{fig:tp} . I also included `fig.align='center', fig.show='hold'` in the header, so that the figure would stay centered (which is not necessary, but aesthetically, I like it.)
+```{r pressure_cap_size_ling, echo=FALSE, fig.cap = "\\label{fig:tp}Plotting Temperature vs. Pressure with a label", fig.width = 3, fig.height = 2, fig.align='center', fig.show='hold'}
+library(ggplot2) # calling the ggplot2 library
+data("pressure") # a dataset built into R
+ggplot(data = pressure, aes(x = temperature, y = pressure)) + geom_line()
+```
+
+\newpage
+# Writing out Math
+One additional reason to use `Rmarkdown` is that we can use the Latex engine underneath it to write out nice looking math, which saves the trouble of having to figure out handwritten notes in a presentation. For example, we can write out a regression equation as $y = \alpha + X\beta + \varepsilon$, without having to copy and past anything in. To write out anything math related, we enclose it in dollar signs $\$$`math`$\$$. The regression example above, for example, is $\$$ `y = \alpha + X\beta + \varepsilon` $\$$. If we want to index something $x_{1}, x_{2}$ etc, the code is $\$$`x_{1}, x_{2}`$\$$. Fractions are written $\frac{1}{2}$, $\$$`\frac{1}{2}`$\$$, and exponents ($2^{2}$) are written $\$$`2^{2}`$\$$.
+
+You'll notice the greek letters have a slash before them, but the letters don't. This slash tells Latex to print that as a greek letter. Similarly $2 \times 2$ is written $\$$ `2 \times 2` $\$$. A useful guide to special characters and formatting in Latex is here \url{https://users.dickinson.edu/~richesod/latex/latexcheatsheet.pdf}. I reference it fairly regularly.
+
+## Matrices
+
+To implement a matrix:
+$$ 
+\left[
+\begin{array}{ccc}
+1 & 2 & 3 \\
+4 & 5 & 6\\
+7 & 8 & 0
+\end{array}
+\right] 
+$$
+you'll need to write:
+```{r, matrix_demo, echo = TRUE, eval = FALSE}
+$$ % start Latex mode
+\left[ %creates the left bracket, the "\left" command scales the bracket "["
+\begin{array}{ccc} % Creates the "array" (matrix), {ccc} defines the number of columns
+1 & 2 & 3 \\ % "&" divides the columns, "\\" creates a new line
+4 & 5 & 6\\
+7 & 8 & 0
+\end{array} % ends the matrix
+\right] %creates the left bracket, the "\right" command scales the bracket "]"
+$$ % ends Latex mode
+```
+without comments:
+
+```{r, matrix_demo_no comments, echo = TRUE, eval = FALSE}
+$$ 
+\left[
+\begin{array}{ccc}
+1 & 2 & 3 \\
+4 & 5 & 6\\
+7 & 8 & 0
+\end{array}
+\right] 
+$$
+```
+
+\newpage
+# Extra Credit (5 pts)
+## Due January 12
+Reproduce the following examples in `Rmarkdown`, and submit the resulting pdf \& `.Rmd` file. 
+
+### 1
+Linear regression with fixed effects:
+$$ y_{i} = \alpha_{0} + \alpha_{j} + x_{i} \beta + \varepsilon $$
+
+
+### 2
+OLS estimation 
+
+Data:
+$$
+X = 
+\left[
+\begin{array}{cc}
+x_{1, 1} & x_{1, 2} \\
+x_{2, 1} & x_{2, 2} \\
+\end{array}
+\right],
+\\
+y = 
+\left[
+\begin{array}{cc}
+y_{1}\\
+y_{2}\\
+\end{array}
+\right]
+$$
+
+OLS equation
+$$
+\hat{\beta} = (X'X)^{-1}(X'y)
+$$
+
+### 3
+Logistic link function:
+$$ Pr(y_{i} = 1) = \frac{1}{1 + e^{-x_{i} \beta}} $$
+
+### 4
+Poisson PMF:
+$$
+      \frac{\lambda^k}{k!} e^{-\lambda}
+$$
+
+### 5 
+Gaussian (normal) PDF:
+$$ \frac{1}{\sigma\sqrt{2\pi}}\, e^{-\frac{(x - \mu)^2}{2 \sigma^2}} $$
+

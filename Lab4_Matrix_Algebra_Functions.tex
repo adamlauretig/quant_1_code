@@ -1,0 +1,253 @@
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\hypersetup{unicode=true,
+            pdftitle={Example Rmarkdown Notebook},
+            pdfauthor={Adam Lauretig},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+%%% Use protect on footnotes to avoid problems with footnotes in titles
+\let\rmarkdownfootnote\footnote%
+\def\footnote{\protect\rmarkdownfootnote}
+
+%%% Change title format to be more compact
+\usepackage{titling}
+
+% Create subtitle command for use in maketitle
+\newcommand{\subtitle}[1]{
+  \posttitle{
+    \begin{center}\large#1\end{center}
+    }
+}
+
+\setlength{\droptitle}{-2em}
+  \title{Example Rmarkdown Notebook}
+  \pretitle{\vspace{\droptitle}\centering\huge}
+  \posttitle{\par}
+  \author{Adam Lauretig}
+  \preauthor{\centering\large\emph}
+  \postauthor{\par}
+  \predate{\centering\large\emph}
+  \postdate{\par}
+  \date{\today}
+
+\usepackage{palatino}
+\usepackage{graphicx}
+\usepackage{scrextend}
+
+\begin{document}
+\maketitle
+
+\section{Matrix Algebra and
+Functions}\label{matrix-algebra-and-functions}
+
+There are five basic data structures in R: vectors, matrices, arrays,
+lists, and data.frames. We'll be going through each of these here, but
+if you want an in depth exploration of these I'd recommend Norman
+Matloff's \emph{The Art of R Programming: A Tour of Statistical Software
+Design}.
+
+\subsection{Matrix basics}\label{matrix-basics}
+
+Up to this point, we've primarily \emph{talked} about vectors. We've
+encountered other data types, but haven't used them. Vectors have
+length, but no width (they can only represent one variable at a time).
+Matrices are just collections of vectors (exactly like you learned in
+math camp). We can combine them by column using \texttt{cbind}, or by
+row, using \texttt{rbind}. We then access elements of matrix by
+\texttt{matrix[row, column]}.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{vap <-}\StringTok{ }\NormalTok{voting.age.population <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{3481823}\NormalTok{, }\DecValTok{496387}\NormalTok{, }\DecValTok{4582842}\NormalTok{, }\DecValTok{2120139}\NormalTok{,}\DecValTok{26955438}\NormalTok{,}\DecValTok{3617942}\NormalTok{,}\DecValTok{2673154}\NormalTok{,}\DecValTok{652189}\NormalTok{,}\DecValTok{472143}\NormalTok{,}\DecValTok{14085749}\NormalTok{,}\DecValTok{6915512}\NormalTok{,}\DecValTok{995937}\NormalTok{,}\DecValTok{1073799}\NormalTok{,}\DecValTok{9600372}\NormalTok{,}\DecValTok{4732010}\NormalTok{,}\DecValTok{2265860}\NormalTok{,}\DecValTok{2068253}\NormalTok{,}\DecValTok{3213141}\NormalTok{,}\DecValTok{3188765}\NormalTok{,}\DecValTok{1033632}\NormalTok{,}\DecValTok{4242214}\NormalTok{,}\DecValTok{4997677}\NormalTok{,}\DecValTok{7620982}\NormalTok{,}\DecValTok{3908159}\NormalTok{,}\DecValTok{2139918}\NormalTok{,}\DecValTok{4426278}\NormalTok{,}\DecValTok{731365}\NormalTok{,}\DecValTok{1321923}\NormalTok{,}\DecValTok{1870315}\NormalTok{,}\DecValTok{1012033}\NormalTok{,}\DecValTok{6598368}\NormalTok{,}\DecValTok{1452962}\NormalTok{,}\DecValTok{14838076}\NormalTok{,}\DecValTok{6752018}\NormalTok{,}\DecValTok{494923}\NormalTok{,}\DecValTok{8697456}\NormalTok{,}\DecValTok{2697855}\NormalTok{,}\DecValTok{2850525}\NormalTok{,}\DecValTok{9612380}\NormalTok{,}\DecValTok{824854}\NormalTok{,}\DecValTok{3303593}\NormalTok{,}\DecValTok{594599}\NormalTok{,}\DecValTok{4636679}\NormalTok{,}\DecValTok{17038979}\NormalTok{,}\DecValTok{1797941}\NormalTok{,}\DecValTok{487900}\NormalTok{,}\DecValTok{5841335}\NormalTok{,}\DecValTok{4876661}\NormalTok{,}\DecValTok{1421717}\NormalTok{,}\DecValTok{4257230}\NormalTok{,}\DecValTok{392344}\NormalTok{)}
+
+\NormalTok{total.votes <-}\StringTok{ }\NormalTok{tv <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\OtherTok{NA}\NormalTok{, }\DecValTok{238307}\NormalTok{, }\DecValTok{1553032}\NormalTok{, }\DecValTok{780409}\NormalTok{,}\DecValTok{8899059}\NormalTok{,}\DecValTok{1586105}\NormalTok{, }\DecValTok{1162391}\NormalTok{,}\DecValTok{258053}\NormalTok{, }\DecValTok{122356}\NormalTok{,}\DecValTok{4884544}\NormalTok{, }\DecValTok{2143845}\NormalTok{,}\DecValTok{348988}\NormalTok{, }\DecValTok{458927}\NormalTok{,}\DecValTok{3586292}\NormalTok{, }\DecValTok{1719351}\NormalTok{,}\DecValTok{1071509}\NormalTok{, }\DecValTok{864083}\NormalTok{,}\DecValTok{1370062}\NormalTok{, }\DecValTok{954896}\NormalTok{,}\OtherTok{NA}\NormalTok{, }\DecValTok{1809237}\NormalTok{, }\DecValTok{2243835}\NormalTok{,}\DecValTok{3852008}\NormalTok{, }\DecValTok{2217552}\NormalTok{,}\OtherTok{NA}\NormalTok{, }\DecValTok{2178278}\NormalTok{, }\DecValTok{411061}\NormalTok{,}\DecValTok{610499}\NormalTok{, }\DecValTok{586274}\NormalTok{,}\DecValTok{418550}\NormalTok{, }\DecValTok{2315643}\NormalTok{,}\DecValTok{568597}\NormalTok{, }\DecValTok{4703830}\NormalTok{,}\DecValTok{2036451}\NormalTok{, }\DecValTok{220479}\NormalTok{,}\DecValTok{4184072}\NormalTok{, }\OtherTok{NA}\NormalTok{,}\DecValTok{1399650}\NormalTok{, }\OtherTok{NA}\NormalTok{,}\DecValTok{392882}\NormalTok{, }\DecValTok{1117311}\NormalTok{,}\DecValTok{341105}\NormalTok{, }\DecValTok{1868363}\NormalTok{,}\OtherTok{NA}\NormalTok{, }\DecValTok{582561}\NormalTok{, }\DecValTok{263025}\NormalTok{,}\DecValTok{2398589}\NormalTok{, }\DecValTok{2085074}\NormalTok{,}\DecValTok{473014}\NormalTok{, }\DecValTok{2183155}\NormalTok{, }\DecValTok{196217}\NormalTok{)}
+
+\NormalTok{m1 <-}\StringTok{ }\KeywordTok{cbind}\NormalTok{(vap, tv) }\CommentTok{# Combined by column}
+\NormalTok{m2 <-}\StringTok{ }\KeywordTok{rbind}\NormalTok{(vap, tv) }\CommentTok{# combined by row}
+\NormalTok{m2[}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{] }\CommentTok{# first row, second column}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##    vap 
+## 496387
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{m1[,}\DecValTok{1}\NormalTok{] }\CommentTok{# the ith colum}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##  [1]  3481823   496387  4582842  2120139 26955438  3617942  2673154
+##  [8]   652189   472143 14085749  6915512   995937  1073799  9600372
+## [15]  4732010  2265860  2068253  3213141  3188765  1033632  4242214
+## [22]  4997677  7620982  3908159  2139918  4426278   731365  1321923
+## [29]  1870315  1012033  6598368  1452962 14838076  6752018   494923
+## [36]  8697456  2697855  2850525  9612380   824854  3303593   594599
+## [43]  4636679 17038979  1797941   487900  5841335  4876661  1421717
+## [50]  4257230   392344
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{m1[}\DecValTok{1}\OperatorTok{:}\DecValTok{5}\NormalTok{,}\DecValTok{1}\OperatorTok{:}\DecValTok{2}\NormalTok{] }\CommentTok{# a submatrix}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##           vap      tv
+## [1,]  3481823      NA
+## [2,]   496387  238307
+## [3,]  4582842 1553032
+## [4,]  2120139  780409
+## [5,] 26955438 8899059
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{m2[}\DecValTok{1}\NormalTok{,}\DecValTok{1}\OperatorTok{:}\DecValTok{10}\NormalTok{]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##  [1]  3481823   496387  4582842  2120139 26955438  3617942  2673154
+##  [8]   652189   472143 14085749
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{m2[}\DecValTok{1}\OperatorTok{:}\DecValTok{2}\NormalTok{, }\DecValTok{1}\OperatorTok{:}\DecValTok{10}\NormalTok{]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##        [,1]   [,2]    [,3]    [,4]     [,5]    [,6]    [,7]   [,8]   [,9]
+## vap 3481823 496387 4582842 2120139 26955438 3617942 2673154 652189 472143
+## tv       NA 238307 1553032  780409  8899059 1586105 1162391 258053 122356
+##        [,10]
+## vap 14085749
+## tv   4884544
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{m2[, }\DecValTok{1}\OperatorTok{:}\DecValTok{10}\NormalTok{] }\CommentTok{# same as previous line since there are only two rows.}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##        [,1]   [,2]    [,3]    [,4]     [,5]    [,6]    [,7]   [,8]   [,9]
+## vap 3481823 496387 4582842 2120139 26955438 3617942 2673154 652189 472143
+## tv       NA 238307 1553032  780409  8899059 1586105 1162391 258053 122356
+##        [,10]
+## vap 14085749
+## tv   4884544
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{class}\NormalTok{(m2)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "matrix"
+\end{verbatim}
+
+
+\end{document}
