@@ -56,6 +56,8 @@ matrix(1:10, nrow = 5, byrow = TRUE) ## not the same
 
 By default, R will fill each column of a matrix, and then move to the next one. If you specify \texttt{byrow = TRUE}, however, R will fill each row, and then move onto the next one. 
 
+\clearpage
+
 ## Arrays and attributes
 
 Arrays are a more general way to store data. Where a matrix can only have 2 dimensions (rows and columns), arrays can have an arbitrary number of dimensions, but this *will* increase the amount of memory they consume. 
@@ -120,6 +122,7 @@ rownames(m2)
 
 ```
 
+\clearpage
 
 ## Lists
 
@@ -197,3 +200,449 @@ my.crazy.list +2 # not so much
 my.crazy.list[[3]] + 2
 ```
 
+\clearpage
+
+## Matrix operations
+Matrices are the workhorses of computational statistics. And just like there are special ways of manipulating matrices in mathematics, there are special operators in R for working with them. Unless you tell R explictly, however, it *will* operate element-wise on a matrix.
+
+```{r, matrix5, echo = TRUE, cache = TRUE}
+
+# A couple of matrices
+H3 <- matrix(c(1, 1/2, 1/3, 1/2, 1/3, 1/4, 1/3, 1/4, 1/5), nrow=3)
+H3
+
+1/cbind(seq(1,3), seq(2, 4), seq(3,5)) # most basic function continue to be "element wise"
+H3+1
+H3*2
+H3^2
+
+mean(H3) # others will treat the matrix as a vector no matter what
+rowSums(H3) # others work on matrices in particular ways (more on this later)
+colSums(H3)
+rowMeans(H3)
+colMeans(H3)
+
+# logicals too
+H3==1
+H3 == c(1,2,3) #what's going on here?
+H3 == H3
+
+```
+
+Some functions are exact translations of math:
+```{r, matrix6, echo=TRUE}
+
+# Some work like they do in the math books
+det(H3) # the determinant -- hard for you ... easy in R
+diag(H3) # get the diagonal elements of amatrix
+diag(1, nrow=3) # make a 3by3 identity matrix
+
+t(H3) # matrix transpose
+
+```
+
+To access only the lower triangle of a matrix, use the `lower.tri()` function, and some indexing:
+
+```{r, matrix7, echo=TRUE}
+Hnew<-H3
+Hnew[lower.tri(H3, diag=TRUE)] # extract the lower triangular elements of H3
+
+# why can we just use lower.tri()?
+lower.tri(H3, diag=TRUE)
+```
+
+
+To get the trace, we'll need to write a function:
+```{r, matrix8}
+
+trace<- function(data){
+  (sum(diag(data)))
+}
+trace(H3)
+```
+
+To multply matrices we use `%*%`, the matrix multiplication operator:
+
+```{r, matrix9}
+
+t(H3)%*%H3
+c(1,2,3)%*%c(1,2,3) # dot product
+matrix(c(1,2,3), ncol=1)%*%c(1,2,3) # outer product
+
+```
+
+To invert a matrix, we use the `solve()` command, which can also be used to solve a linear system:
+
+```{r, matrix10}
+solve(H3)
+invH3<-solve(H3)
+H3%*%invH3 ## close enough?
+
+# solving a linear system:
+b<-c(1,2,3)
+
+solve(H3, b)
+
+
+```
+
+\clearpage
+
+# Data analysis - Roll your own linear model
+
+You want to know: is the presidential vote share positively related to GDP growth? One way to test this is with a linear regression model:
+
+```{r, data1, cache = TRUE}
+library(foreign)
+vote <- read.dta("votegdp.dta") # since this is in the same folder as the markdown document, we don't need a new filepath
+
+lm(vote~q2gdp, data=vote) # sure is
+coefficients <- lm(vote~q2gdp, data=vote)$coefficients
+
+```
+
+But what is this doing? First, adding a constant column to the data, for our y intercept (order matters here)! Then
+
+```{r, data2, cache = TRUE}
+constant <- rep(1, nrow(vote))
+X <- cbind(constant, vote$q2gdp)
+```
+
+Then, removing the rows which have missing values:
+```{r, data3, cache = TRUE}
+
+
+X <- X[!is.na(vote$vote),]
+# na.omit(vote) # an alternative way to get rid of NA's in advance
+class(X) # it's a matrix (not a data frame) so we can use our solution
+is.matrix(X) # alternative approach
+```
+
+Creating our Y variable:
+```{r, data4, cache = TRUE}
+Y <- cbind(vote$vote[!is.na(vote$vote)])
+
+```
+
+
+and finally, solving $(X'X)^{-1}(X'y)$ (the OLS equation), and checking whether our results are the same as `lm()`:
+```{r, data5, cache=TRUE}
+
+B <- solve((t(X)%*%X))%*%(t(X)%*%Y)
+B[1]-coefficients[1] # about zero
+B[2] - coefficients[2] # about zero
+
+```
+
+\clearpage
+
+# Flow control and functions
+
+You will find that for many tasks your R scripts will start to get *long*.  Complex tasks will start turning into complex code.
+
+**TIPS:**
+
+1. If you find yourself copying and pasting more than 2-3 times -- think about writing a loop
+or a function instead.
+2. If you ever spend more than 20 minutes manually reshaping, editing, copying/pasting data 
+that is already encoded and on a computer --- then somewhere a fairy is killed.
+3. Some combination of the basic skills in today's lessons can be used to solve most of these
+kinds of problems -- although it may take time work out how.
+
+\clearpage
+
+## `if(){}`, `else(){}`, `ifelse(){}`
+
+Let's start with `if()`, which works as follows:
+`if(condition){commands}`. The input in the parenthesis needs to be something that returns a logical, and tou can put anything in the braces you want:
+```{r, if1}
+
+if(TRUE){print("I got here")} #
+if(FALSE){print("I also got here")} #
+```
+
+
+You can combine `if()` with an `else()` command. Everything in the else{} braces will be executed when the condition is false
+```{r, if2}
+
+x <- 3
+if(x>2){
+  print("X is larger than 2")
+} else { # notice that these are on the same line
+  print("X is 2 or smaller")
+}
+
+x <- (-3)
+if(x>2){
+  print("X is larger than 2")
+} else { # notice that these are on the same line
+  print("X is 2 or smaller")
+}
+
+```
+
+However, `if()` and `else()` do not play nicely with vectors, so instead we'll use `ifelse()`, a *vectorized* version of these two commands:
+
+```{r, if3, eval = FALSE}
+# This will throw an error
+if (c(1,2)>2){
+  print("This won't work")
+}
+```
+
+ try the `ifelse()` command instead
+
+```{r, if4}
+x <- c(0,2)
+ifelse(x > 1, "yes", "no") # but you can only put in values in here, not a bunch of instructions.
+
+# beware though ... if your outputs are vectors it will work element-wise
+yes <- c("yes1", "yes2")
+no <- c("no1", "no2")
+ifelse(x>1, yes, no)
+
+```
+
+
+Note that the braces are not technically necessary if you have only a one line command, but not using them is like writing without punction. Someone can figure out what you're saying, but it makes life harder than it has to be.
+
+```{r, if5}
+
+x<-3
+if (x > 2) y <- 2*x else y <- 3*x
+y
+
+```
+
+
+\clearpage
+
+## repeat, break
+`repeat{ Execute these commands over and over again }`
+You had better include a break command in there, or you are not going to be happy. The 'break' command will stop the repeat (it will also work for the `for()` and `while()` loops below).
+```{r, break1}
+
+plot(NULL, xlim=c(0,100), ylim=c(0,1)) # make a blank plot with the limits set by those vectors
+x <- 0
+repeat {
+  y <- 1/x
+  x <- x+1
+  points(x, y)
+  if (x == 100) { break }
+}
+```
+
+Example: make the Fibonacci series less than 300:
+```{r, break2}
+# Example: make the Fibonacci series less than 300
+Fib1 <- 1
+Fib2 <- 1
+Fibonacci <- c(0, Fib2)
+repeat{
+  Fibonacci <- c(Fibonacci, Fib2)
+  oldFib2 <- Fib2
+  Fib2<-Fib1 + Fib2
+  Fib1 <- oldFib2
+  if (Fib2 > 300) {break}
+}
+Fibonacci
+
+```
+
+**Tip:** Save your files before running any repeat.  *Better yet...**don't** use repeat.* You should write for-loops that can stop on their own.
+
+\clearpage
+
+## `while()`
+ A `while()` loop is just a repeat, where the `if(condition){break}` is specified at the top. Similar to the above:
+ 
+```{r, while1}
+
+plot(NULL, xlim=c(0,100), ylim=c(0,1))
+x <- 0
+while(x < 100) {
+  y <- 1/x
+  x <- x+1
+  points(x,y)
+}
+
+# Example 2
+Fib1 <- 1
+Fib2 <- 1
+Fibonacci <- c(0, Fib2)
+while(Fib2 <= 300){
+  Fibonacci <- c(Fibonacci, Fib2)
+  oldFib2 <- Fib2
+  Fib2 <- Fib1 + Fib2
+  Fib1 <- oldFib2
+}
+Fibonacci
+```
+ 
+### Example, using the Fearon and Laitin data
+Let's say we want to calculate the average number of civil-wars onsets for each level of democratization (polity2)
+
+```{r, FL1}
+library(foreign)
+civilw <- read.dta("repdata.dta")
+democracy <- min(civilw$polity2, na.rm=T)
+output_vector <- NULL
+index <- 1
+while(democracy <= max(civilw$polity2, na.rm=T)){
+  output_vector[index] <- mean(civilw$onset[civilw$polity2 == democracy], na.rm=T)
+  democracy <- democracy + 1 # DON'T FORGET THIS LINE OR YOU WILL BE IN AN ENDLESS LOOP
+  index <- index + 1 # this line is needed to index forward
+}
+output_vector*100 # civil wars start this percent of the time at each level of democracy
+plot(c(min(civilw$polity2, na.rm=T):max(civilw$polity2, na.rm=T)), output_vector*100,
+     xlab="Polity Scores", ylab="% Civil War Onset")
+```
+
+In general, this is a pretty hack-y way to calculate this, and you're better off using something like `data.table`, as discussed in lab 2.
+
+\clearpage
+
+## for-loops, `next()`
+
+The while loop still requires a lot of attention to indexing. Also ... in many instances all we want to do is increment by 1. So programmers put together a "for loop."
+
+`for (name in vector) {execute these commands on each value of the vector}` whatever you put into the name slot will become a "local" variable
+
+```{r, for1}
+
+for (monkey in c("spider", "howler", "wurst")){print(monkey)}
+
+# or more commonly
+for (i in 1:20){
+  print(i)
+}
+```
+
+### Example of for-loops
+
+```{r, for2}
+
+plot(NULL, xlim=c(0,100), ylim=c(0,1))
+for (i in 0:100){points(i, 1/i)}
+
+plot(NULL, xlim=c(0,11), ylim=c(0,11))
+for(i in 1:10){
+  abline(v=i)
+  abline(h=i)
+}
+
+output <- NULL
+for(i in 1:20){
+  output[i] <- 0+i
+}
+```
+
+```{r, for3}
+library(foreign)
+civilw <- read.dta("repdata.dta")
+output_vector <- NULL # Still need to instantiate the variable or you cannot index it
+democracy <- sort(unique(civilw$polity2))
+for (i in min(democracy):max(democracy)){
+  output_vector <- c(output_vector, mean(civilw$onset[civilw$polity2 == democracy[i+11]], na.rm=T)*100)
+}
+plot(c(min(democracy):max(democracy)),output_vector,
+     xlab="Polity Scores", ylab="% civil War Onset")
+
+```
+
+Sometimes you might not want to execute the commands for every element in the vector use the next command to skip (you can also use the break)
+
+```{r, next1}
+
+some_odds <- NULL
+for (i in 1:200){
+  if (i%%2 != 0) {
+    some_odds<-c(some_odds, i)
+  } else { next }
+}
+some_odds
+
+```
+
+## Functions
+
+We have been using functions this whole time, but we can also make our own. This both helps you keep your code organized, and helps you better understand other people's functions. In particular, functions can be helpful if you have a repetitive serious of tasks to perform on your data.
+
+### Example:
+Here are three ways to write the same function:
+
+```{r, function1}
+my_function1 <- function(x){ # take in a value of x
+  y<-x^2+3*x-2 # conduct some set of operations using the input values
+  return(y) # return some value. In this case we are returning a simple numeric value
+}
+
+my_function2 <- function(x){
+  x^2+3*x-2 # we don't have to specify a return
+}
+
+my_function3 <- function(x) x^2+3*x-2 # for simple functions, we don't even need brackets
+
+
+my_function1(c(1:20))
+my_function2(c(1:20))
+my_function3(c(1:20))
+
+```
+
+1 or 2 are the preferred ways to write functions, for the same reason we used braces with `if()` and `else()`: they make code more legible.
+
+Functions are just another object.  We can define the functions using:
+1. The word `function`
+2. A pair of round parentheses `()` which enclose the argument list.  The list may be empty.
+3. A single statement, or a sequence of statements enclosed in curly braces `{ }`.
+
+
+Sometimes a function will return a value, but other times it will just execute a command.
+
+```{r, function2}
+
+mad_libs <- function(noun, location, proper_noun, activity){
+  print(paste("One day, I was looking all over for my", noun))
+  print(paste("I decided I must have left it at the", location))
+  print(paste("When I got there, I found", proper_noun, "using my", noun, "to", activity))
+}
+mad_libs("baseball", "lake house", "Jan Pierskalla", "eat pudding")
+```
+
+```{r, function3}
+sqrt_plotter <- function(x){
+  plot(x, sqrt(x))
+}
+sqrt_plotter(1:10)
+```
+
+
+Other times we will want to return a value
+
+```{r, function4}
+my_abs <- function(x){
+  ifelse(x<=0, -1*x, x)
+}
+my_abs(c(-1,2,3,-4,5))
+
+```
+
+
+You can set default values for some of your arguments or all of them:
+
+```{r, function5}
+
+gaga_equation <- function(num_rah=2, num_ah=3, num_ga=2, num_la=2){
+  rahs<-paste(rep("RAH", num_rah), collapse=", ")
+  ahs<-paste(rep("AH", num_ah), collapse=", ")
+  gas<-paste(rep("GA", num_ga), collapse=", ")
+  las<-paste(rep("LA", num_la), collapse=", ")
+  paste(rahs, ",", ahs,  "!  ROMA, ROMAMA!", gas,",", las)
+}
+gaga_equation()
+gaga_equation(num_rah=5)
+rahs 
+
+```
+Note that variables created within the function are NOT in the global environment, they don't exist "outside" of the function, and cease to exist when the function stops running.

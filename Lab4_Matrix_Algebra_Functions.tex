@@ -317,6 +317,8 @@ By default, R will fill each column of a matrix, and then move to the
 next one. If you specify \texttt{byrow = TRUE}, however, R will fill
 each row, and then move onto the next one.
 
+\clearpage
+
 \subsection{Arrays and attributes}\label{arrays-and-attributes}
 
 Arrays are a more general way to store data. Where a matrix can only
@@ -599,6 +601,8 @@ R is flexible, and there are multiple ways to access dimnames:
 \begin{verbatim}
 ## [1] "vap" "tv"
 \end{verbatim}
+
+\clearpage
 
 \subsection{Lists}\label{lists}
 
@@ -1164,6 +1168,852 @@ document doesn't compile):
 \NormalTok{my.crazy.list[[}\DecValTok{3}\NormalTok{]] }\OperatorTok{+}\StringTok{ }\DecValTok{2}
 \end{Highlighting}
 \end{Shaded}
+
+\clearpage
+
+\subsection{Matrix operations}\label{matrix-operations}
+
+Matrices are the workhorses of computational statistics. And just like
+there are special ways of manipulating matrices in mathematics, there
+are special operators in R for working with them. Unless you tell R
+explictly, however, it \emph{will} operate element-wise on a matrix.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# A couple of matrices}
+\NormalTok{H3 <-}\StringTok{ }\KeywordTok{matrix}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{1}\OperatorTok{/}\DecValTok{2}\NormalTok{, }\DecValTok{1}\OperatorTok{/}\DecValTok{3}\NormalTok{, }\DecValTok{1}\OperatorTok{/}\DecValTok{2}\NormalTok{, }\DecValTok{1}\OperatorTok{/}\DecValTok{3}\NormalTok{, }\DecValTok{1}\OperatorTok{/}\DecValTok{4}\NormalTok{, }\DecValTok{1}\OperatorTok{/}\DecValTok{3}\NormalTok{, }\DecValTok{1}\OperatorTok{/}\DecValTok{4}\NormalTok{, }\DecValTok{1}\OperatorTok{/}\DecValTok{5}\NormalTok{), }\DataTypeTok{nrow=}\DecValTok{3}\NormalTok{)}
+\NormalTok{H3}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##           [,1]      [,2]      [,3]
+## [1,] 1.0000000 0.5000000 0.3333333
+## [2,] 0.5000000 0.3333333 0.2500000
+## [3,] 0.3333333 0.2500000 0.2000000
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\DecValTok{1}\OperatorTok{/}\KeywordTok{cbind}\NormalTok{(}\KeywordTok{seq}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{3}\NormalTok{), }\KeywordTok{seq}\NormalTok{(}\DecValTok{2}\NormalTok{, }\DecValTok{4}\NormalTok{), }\KeywordTok{seq}\NormalTok{(}\DecValTok{3}\NormalTok{,}\DecValTok{5}\NormalTok{)) }\CommentTok{# most basic function continue to be "element wise"}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##           [,1]      [,2]      [,3]
+## [1,] 1.0000000 0.5000000 0.3333333
+## [2,] 0.5000000 0.3333333 0.2500000
+## [3,] 0.3333333 0.2500000 0.2000000
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{H3}\OperatorTok{+}\DecValTok{1}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##          [,1]     [,2]     [,3]
+## [1,] 2.000000 1.500000 1.333333
+## [2,] 1.500000 1.333333 1.250000
+## [3,] 1.333333 1.250000 1.200000
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{H3}\OperatorTok{*}\DecValTok{2}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##           [,1]      [,2]      [,3]
+## [1,] 2.0000000 1.0000000 0.6666667
+## [2,] 1.0000000 0.6666667 0.5000000
+## [3,] 0.6666667 0.5000000 0.4000000
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{H3}\OperatorTok{^}\DecValTok{2}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##           [,1]      [,2]      [,3]
+## [1,] 1.0000000 0.2500000 0.1111111
+## [2,] 0.2500000 0.1111111 0.0625000
+## [3,] 0.1111111 0.0625000 0.0400000
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{mean}\NormalTok{(H3) }\CommentTok{# others will treat the matrix as a vector no matter what}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.4111111
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{rowSums}\NormalTok{(H3) }\CommentTok{# others work on matrices in particular ways (more on this later)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 1.8333333 1.0833333 0.7833333
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{colSums}\NormalTok{(H3)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 1.8333333 1.0833333 0.7833333
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{rowMeans}\NormalTok{(H3)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.6111111 0.3611111 0.2611111
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{colMeans}\NormalTok{(H3)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.6111111 0.3611111 0.2611111
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# logicals too}
+\NormalTok{H3}\OperatorTok{==}\DecValTok{1}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##       [,1]  [,2]  [,3]
+## [1,]  TRUE FALSE FALSE
+## [2,] FALSE FALSE FALSE
+## [3,] FALSE FALSE FALSE
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{H3 }\OperatorTok{==}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{) }\CommentTok{#what's going on here?}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##       [,1]  [,2]  [,3]
+## [1,]  TRUE FALSE FALSE
+## [2,] FALSE FALSE FALSE
+## [3,] FALSE FALSE FALSE
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{H3 }\OperatorTok{==}\StringTok{ }\NormalTok{H3}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##      [,1] [,2] [,3]
+## [1,] TRUE TRUE TRUE
+## [2,] TRUE TRUE TRUE
+## [3,] TRUE TRUE TRUE
+\end{verbatim}
+
+Some functions are exact translations of math:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Some work like they do in the math books}
+\KeywordTok{det}\NormalTok{(H3) }\CommentTok{# the determinant -- hard for you ... easy in R}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.000462963
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{diag}\NormalTok{(H3) }\CommentTok{# get the diagonal elements of amatrix}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 1.0000000 0.3333333 0.2000000
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{diag}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DataTypeTok{nrow=}\DecValTok{3}\NormalTok{) }\CommentTok{# make a 3by3 identity matrix}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##      [,1] [,2] [,3]
+## [1,]    1    0    0
+## [2,]    0    1    0
+## [3,]    0    0    1
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{t}\NormalTok{(H3) }\CommentTok{# matrix transpose}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##           [,1]      [,2]      [,3]
+## [1,] 1.0000000 0.5000000 0.3333333
+## [2,] 0.5000000 0.3333333 0.2500000
+## [3,] 0.3333333 0.2500000 0.2000000
+\end{verbatim}
+
+To access only the lower triangle of a matrix, use the
+\texttt{lower.tri()} function, and some indexing:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Hnew<-H3}
+\NormalTok{Hnew[}\KeywordTok{lower.tri}\NormalTok{(H3, }\DataTypeTok{diag=}\OtherTok{TRUE}\NormalTok{)] }\CommentTok{# extract the lower triangular elements of H3}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 1.0000000 0.5000000 0.3333333 0.3333333 0.2500000 0.2000000
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# why can we just use lower.tri()?}
+\KeywordTok{lower.tri}\NormalTok{(H3, }\DataTypeTok{diag=}\OtherTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##      [,1]  [,2]  [,3]
+## [1,] TRUE FALSE FALSE
+## [2,] TRUE  TRUE FALSE
+## [3,] TRUE  TRUE  TRUE
+\end{verbatim}
+
+To get the trace, we'll need to write a function:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{trace<-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(data)\{}
+\NormalTok{  (}\KeywordTok{sum}\NormalTok{(}\KeywordTok{diag}\NormalTok{(data)))}
+\NormalTok{\}}
+\KeywordTok{trace}\NormalTok{(H3)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 1.533333
+\end{verbatim}
+
+To multply matrices we use \texttt{\%*\%}, the matrix multiplication
+operator:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{t}\NormalTok{(H3)}\OperatorTok{%*%}\NormalTok{H3}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##          [,1]      [,2]      [,3]
+## [1,] 1.361111 0.7500000 0.5250000
+## [2,] 0.750000 0.4236111 0.3000000
+## [3,] 0.525000 0.3000000 0.2136111
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{)}\OperatorTok{%*%}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{) }\CommentTok{# dot product}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##      [,1]
+## [1,]   14
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{matrix}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{), }\DataTypeTok{ncol=}\DecValTok{1}\NormalTok{)}\OperatorTok{%*%}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{) }\CommentTok{# outer product}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##      [,1] [,2] [,3]
+## [1,]    1    2    3
+## [2,]    2    4    6
+## [3,]    3    6    9
+\end{verbatim}
+
+To invert a matrix, we use the \texttt{solve()} command, which can also
+be used to solve a linear system:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{solve}\NormalTok{(H3)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##      [,1] [,2] [,3]
+## [1,]    9  -36   30
+## [2,]  -36  192 -180
+## [3,]   30 -180  180
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{invH3<-}\KeywordTok{solve}\NormalTok{(H3)}
+\NormalTok{H3}\OperatorTok{%*%}\NormalTok{invH3 ## close enough?}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##              [,1]          [,2] [,3]
+## [1,] 1.000000e+00  0.000000e+00    0
+## [2,] 8.881784e-16  1.000000e+00    0
+## [3,] 0.000000e+00 -7.105427e-15    1
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# solving a linear system:}
+\NormalTok{b<-}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{)}
+
+\KeywordTok{solve}\NormalTok{(H3, b)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1]   27 -192  210
+\end{verbatim}
+
+\clearpage
+
+\section{Data analysis - Roll your own linear
+model}\label{data-analysis---roll-your-own-linear-model}
+
+You want to know: is the presidential vote share positively related to
+GDP growth? One way to test this is with a linear regression model:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(foreign)}
+\NormalTok{vote <-}\StringTok{ }\KeywordTok{read.dta}\NormalTok{(}\StringTok{"votegdp.dta"}\NormalTok{) }\CommentTok{# since this is in the same folder as the markdown document, we don't need a new filepath}
+
+\KeywordTok{lm}\NormalTok{(vote}\OperatorTok{~}\NormalTok{q2gdp, }\DataTypeTok{data=}\NormalTok{vote) }\CommentTok{# sure is}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = vote ~ q2gdp, data = vote)
+## 
+## Coefficients:
+## (Intercept)        q2gdp  
+##      49.144        0.765
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{coefficients <-}\StringTok{ }\KeywordTok{lm}\NormalTok{(vote}\OperatorTok{~}\NormalTok{q2gdp, }\DataTypeTok{data=}\NormalTok{vote)}\OperatorTok{$}\NormalTok{coefficients}
+\end{Highlighting}
+\end{Shaded}
+
+But what is this doing? First, adding a constant column to the data, for
+our y intercept (order matters here)! Then
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{constant <-}\StringTok{ }\KeywordTok{rep}\NormalTok{(}\DecValTok{1}\NormalTok{, }\KeywordTok{nrow}\NormalTok{(vote))}
+\NormalTok{X <-}\StringTok{ }\KeywordTok{cbind}\NormalTok{(constant, vote}\OperatorTok{$}\NormalTok{q2gdp)}
+\end{Highlighting}
+\end{Shaded}
+
+Then, removing the rows which have missing values:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{X <-}\StringTok{ }\NormalTok{X[}\OperatorTok{!}\KeywordTok{is.na}\NormalTok{(vote}\OperatorTok{$}\NormalTok{vote),]}
+\CommentTok{# na.omit(vote) # an alternative way to get rid of NA's in advance}
+\KeywordTok{class}\NormalTok{(X) }\CommentTok{# it's a matrix (not a data frame) so we can use our solution}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "matrix"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{is.matrix}\NormalTok{(X) }\CommentTok{# alternative approach}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] TRUE
+\end{verbatim}
+
+Creating our Y variable:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Y <-}\StringTok{ }\KeywordTok{cbind}\NormalTok{(vote}\OperatorTok{$}\NormalTok{vote[}\OperatorTok{!}\KeywordTok{is.na}\NormalTok{(vote}\OperatorTok{$}\NormalTok{vote)])}
+\end{Highlighting}
+\end{Shaded}
+
+and finally, solving \((X'X)^{-1}(X'y)\) (the OLS equation), and
+checking whether our results are the same as \texttt{lm()}:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{B <-}\StringTok{ }\KeywordTok{solve}\NormalTok{((}\KeywordTok{t}\NormalTok{(X)}\OperatorTok{%*%}\NormalTok{X))}\OperatorTok{%*%}\NormalTok{(}\KeywordTok{t}\NormalTok{(X)}\OperatorTok{%*%}\NormalTok{Y)}
+\NormalTok{B[}\DecValTok{1}\NormalTok{]}\OperatorTok{-}\NormalTok{coefficients[}\DecValTok{1}\NormalTok{] }\CommentTok{# about zero}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   (Intercept) 
+## -7.105427e-15
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{B[}\DecValTok{2}\NormalTok{] }\OperatorTok{-}\StringTok{ }\NormalTok{coefficients[}\DecValTok{2}\NormalTok{] }\CommentTok{# about zero}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##        q2gdp 
+## 2.220446e-16
+\end{verbatim}
+
+\clearpage
+
+\section{Flow control and functions}\label{flow-control-and-functions}
+
+You will find that for many tasks your R scripts will start to get
+\emph{long}. Complex tasks will start turning into complex code.
+
+\textbf{TIPS:}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  If you find yourself copying and pasting more than 2-3 times -- think
+  about writing a loop or a function instead.
+\item
+  If you ever spend more than 20 minutes manually reshaping, editing,
+  copying/pasting data that is already encoded and on a computer ---
+  then somewhere a fairy is killed.
+\item
+  Some combination of the basic skills in today's lessons can be used to
+  solve most of these kinds of problems -- although it may take time
+  work out how.
+\end{enumerate}
+
+\clearpage
+
+\subsection{\texorpdfstring{\texttt{if()\{\}}, \texttt{else()\{\}},
+\texttt{ifelse()\{\}}}{if()\{\}, else()\{\}, ifelse()\{\}}}\label{if-else-ifelse}
+
+Let's start with \texttt{if()}, which works as follows:
+\texttt{if(condition)\{commands\}}. The input in the parenthesis needs
+to be something that returns a logical, and tou can put anything in the
+braces you want:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ControlFlowTok{if}\NormalTok{(}\OtherTok{TRUE}\NormalTok{)\{}\KeywordTok{print}\NormalTok{(}\StringTok{"I got here"}\NormalTok{)\} }\CommentTok{#}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "I got here"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ControlFlowTok{if}\NormalTok{(}\OtherTok{FALSE}\NormalTok{)\{}\KeywordTok{print}\NormalTok{(}\StringTok{"I also got here"}\NormalTok{)\} }\CommentTok{#}
+\end{Highlighting}
+\end{Shaded}
+
+You can combine \texttt{if()} with an \texttt{else()} command.
+Everything in the else\{\} braces will be executed when the condition is
+false
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{x <-}\StringTok{ }\DecValTok{3}
+\ControlFlowTok{if}\NormalTok{(x}\OperatorTok{>}\DecValTok{2}\NormalTok{)\{}
+  \KeywordTok{print}\NormalTok{(}\StringTok{"X is larger than 2"}\NormalTok{)}
+\NormalTok{\} }\ControlFlowTok{else}\NormalTok{ \{ }\CommentTok{# notice that these are on the same line}
+  \KeywordTok{print}\NormalTok{(}\StringTok{"X is 2 or smaller"}\NormalTok{)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "X is larger than 2"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{x <-}\StringTok{ }\NormalTok{(}\OperatorTok{-}\DecValTok{3}\NormalTok{)}
+\ControlFlowTok{if}\NormalTok{(x}\OperatorTok{>}\DecValTok{2}\NormalTok{)\{}
+  \KeywordTok{print}\NormalTok{(}\StringTok{"X is larger than 2"}\NormalTok{)}
+\NormalTok{\} }\ControlFlowTok{else}\NormalTok{ \{ }\CommentTok{# notice that these are on the same line}
+  \KeywordTok{print}\NormalTok{(}\StringTok{"X is 2 or smaller"}\NormalTok{)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "X is 2 or smaller"
+\end{verbatim}
+
+However, \texttt{if()} and \texttt{else()} do not play nicely with
+vectors, so instead we'll use \texttt{ifelse()}, a \emph{vectorized}
+version of these two commands:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# This will throw an error}
+\ControlFlowTok{if}\NormalTok{ (}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{)}\OperatorTok{>}\DecValTok{2}\NormalTok{)\{}
+  \KeywordTok{print}\NormalTok{(}\StringTok{"This won't work"}\NormalTok{)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+try the \texttt{ifelse()} command instead
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{x <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{2}\NormalTok{)}
+\KeywordTok{ifelse}\NormalTok{(x }\OperatorTok{>}\StringTok{ }\DecValTok{1}\NormalTok{, }\StringTok{"yes"}\NormalTok{, }\StringTok{"no"}\NormalTok{) }\CommentTok{# but you can only put in values in here, not a bunch of instructions.}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "no"  "yes"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# beware though ... if your outputs are vectors it will work element-wise}
+\NormalTok{yes <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"yes1"}\NormalTok{, }\StringTok{"yes2"}\NormalTok{)}
+\NormalTok{no <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"no1"}\NormalTok{, }\StringTok{"no2"}\NormalTok{)}
+\KeywordTok{ifelse}\NormalTok{(x}\OperatorTok{>}\DecValTok{1}\NormalTok{, yes, no)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "no1"  "yes2"
+\end{verbatim}
+
+Note that the braces are not technically necessary if you have only a
+one line command, but not using them is like writing without punction.
+Someone can figure out what you're saying, but it makes life harder than
+it has to be.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{x<-}\DecValTok{3}
+\ControlFlowTok{if}\NormalTok{ (x }\OperatorTok{>}\StringTok{ }\DecValTok{2}\NormalTok{) y <-}\StringTok{ }\DecValTok{2}\OperatorTok{*}\NormalTok{x }\ControlFlowTok{else}\NormalTok{ y <-}\StringTok{ }\DecValTok{3}\OperatorTok{*}\NormalTok{x}
+\NormalTok{y}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 6
+\end{verbatim}
+
+\clearpage
+
+\subsection{repeat, break}\label{repeat-break}
+
+\texttt{repeat\{\ Execute\ these\ commands\ over\ and\ over\ again\ \}}
+You had better include a break command in there, or you are not going to
+be happy. The `break' command will stop the repeat (it will also work
+for the \texttt{for()} and \texttt{while()} loops below).
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{plot}\NormalTok{(}\OtherTok{NULL}\NormalTok{, }\DataTypeTok{xlim=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{100}\NormalTok{), }\DataTypeTok{ylim=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{1}\NormalTok{)) }\CommentTok{# make a blank plot with the limits set by those vectors}
+\NormalTok{x <-}\StringTok{ }\DecValTok{0}
+\ControlFlowTok{repeat}\NormalTok{ \{}
+\NormalTok{  y <-}\StringTok{ }\DecValTok{1}\OperatorTok{/}\NormalTok{x}
+\NormalTok{  x <-}\StringTok{ }\NormalTok{x}\OperatorTok{+}\DecValTok{1}
+  \KeywordTok{points}\NormalTok{(x, y)}
+  \ControlFlowTok{if}\NormalTok{ (x }\OperatorTok{==}\StringTok{ }\DecValTok{100}\NormalTok{) \{ }\ControlFlowTok{break}\NormalTok{ \}}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Lab4_Matrix_Algebra_Functions_files/figure-latex/break1-1.pdf}
+
+Example: make the Fibonacci series less than 300:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Example: make the Fibonacci series less than 300}
+\NormalTok{Fib1 <-}\StringTok{ }\DecValTok{1}
+\NormalTok{Fib2 <-}\StringTok{ }\DecValTok{1}
+\NormalTok{Fibonacci <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, Fib2)}
+\ControlFlowTok{repeat}\NormalTok{\{}
+\NormalTok{  Fibonacci <-}\StringTok{ }\KeywordTok{c}\NormalTok{(Fibonacci, Fib2)}
+\NormalTok{  oldFib2 <-}\StringTok{ }\NormalTok{Fib2}
+\NormalTok{  Fib2<-Fib1 }\OperatorTok{+}\StringTok{ }\NormalTok{Fib2}
+\NormalTok{  Fib1 <-}\StringTok{ }\NormalTok{oldFib2}
+  \ControlFlowTok{if}\NormalTok{ (Fib2 }\OperatorTok{>}\StringTok{ }\DecValTok{300}\NormalTok{) \{}\ControlFlowTok{break}\NormalTok{\}}
+\NormalTok{\}}
+\NormalTok{Fibonacci}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##  [1]   0   1   1   2   3   5   8  13  21  34  55  89 144 233
+\end{verbatim}
+
+**\url{Tip:**} Save your files before running any repeat. \emph{Better
+yet\ldots{}\textbf{don't} use repeat.} You should write for-loops that
+can stop on their own.
+
+\clearpage
+
+\subsection{\texorpdfstring{\texttt{while()}}{while()}}\label{while}
+
+A \texttt{while()} loop is just a repeat, where the
+\texttt{if(condition)\{break\}} is specified at the top. Similar to the
+above:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{plot}\NormalTok{(}\OtherTok{NULL}\NormalTok{, }\DataTypeTok{xlim=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{100}\NormalTok{), }\DataTypeTok{ylim=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{1}\NormalTok{))}
+\NormalTok{x <-}\StringTok{ }\DecValTok{0}
+\ControlFlowTok{while}\NormalTok{(x }\OperatorTok{<}\StringTok{ }\DecValTok{100}\NormalTok{) \{}
+\NormalTok{  y <-}\StringTok{ }\DecValTok{1}\OperatorTok{/}\NormalTok{x}
+\NormalTok{  x <-}\StringTok{ }\NormalTok{x}\OperatorTok{+}\DecValTok{1}
+  \KeywordTok{points}\NormalTok{(x,y)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Lab4_Matrix_Algebra_Functions_files/figure-latex/while1-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Example 2}
+\NormalTok{Fib1 <-}\StringTok{ }\DecValTok{1}
+\NormalTok{Fib2 <-}\StringTok{ }\DecValTok{1}
+\NormalTok{Fibonacci <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, Fib2)}
+\ControlFlowTok{while}\NormalTok{(Fib2 }\OperatorTok{<=}\StringTok{ }\DecValTok{300}\NormalTok{)\{}
+\NormalTok{  Fibonacci <-}\StringTok{ }\KeywordTok{c}\NormalTok{(Fibonacci, Fib2)}
+\NormalTok{  oldFib2 <-}\StringTok{ }\NormalTok{Fib2}
+\NormalTok{  Fib2 <-}\StringTok{ }\NormalTok{Fib1 }\OperatorTok{+}\StringTok{ }\NormalTok{Fib2}
+\NormalTok{  Fib1 <-}\StringTok{ }\NormalTok{oldFib2}
+\NormalTok{\}}
+\NormalTok{Fibonacci}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##  [1]   0   1   1   2   3   5   8  13  21  34  55  89 144 233
+\end{verbatim}
+
+\subsubsection{Example, using the Fearon and Laitin
+data}\label{example-using-the-fearon-and-laitin-data}
+
+Let's say we want to calculate the average number of civil-wars onsets
+for each level of democratization (polity2)
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(foreign)}
+\NormalTok{civilw <-}\StringTok{ }\KeywordTok{read.dta}\NormalTok{(}\StringTok{"repdata.dta"}\NormalTok{)}
+\NormalTok{democracy <-}\StringTok{ }\KeywordTok{min}\NormalTok{(civilw}\OperatorTok{$}\NormalTok{polity2, }\DataTypeTok{na.rm=}\NormalTok{T)}
+\NormalTok{output_vector <-}\StringTok{ }\OtherTok{NULL}
+\NormalTok{index <-}\StringTok{ }\DecValTok{1}
+\ControlFlowTok{while}\NormalTok{(democracy }\OperatorTok{<=}\StringTok{ }\KeywordTok{max}\NormalTok{(civilw}\OperatorTok{$}\NormalTok{polity2, }\DataTypeTok{na.rm=}\NormalTok{T))\{}
+\NormalTok{  output_vector[index] <-}\StringTok{ }\KeywordTok{mean}\NormalTok{(civilw}\OperatorTok{$}\NormalTok{onset[civilw}\OperatorTok{$}\NormalTok{polity2 }\OperatorTok{==}\StringTok{ }\NormalTok{democracy], }\DataTypeTok{na.rm=}\NormalTok{T)}
+\NormalTok{  democracy <-}\StringTok{ }\NormalTok{democracy }\OperatorTok{+}\StringTok{ }\DecValTok{1} \CommentTok{# DON'T FORGET THIS LINE OR YOU WILL BE IN AN }\RegionMarkerTok{END}\CommentTok{LESS LOOP}
+\NormalTok{  index <-}\StringTok{ }\NormalTok{index }\OperatorTok{+}\StringTok{ }\DecValTok{1} \CommentTok{# this line is needed to index forward}
+\NormalTok{\}}
+\NormalTok{output_vector}\OperatorTok{*}\DecValTok{100} \CommentTok{# civil wars start this percent of the time at each level of democracy}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##  [1]  0.5235602  1.5015015  1.3623978  1.4115899  1.9543974  4.6875000
+##  [7]  3.4782609  1.6574586  0.9523810  2.0833333 10.7784431  4.1095890
+## [13]  1.8518519  3.4482759  3.2051282  3.0303030  1.1299435  1.4492754
+## [19]  2.1875000  0.6993007  0.3289474
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{plot}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\KeywordTok{min}\NormalTok{(civilw}\OperatorTok{$}\NormalTok{polity2, }\DataTypeTok{na.rm=}\NormalTok{T)}\OperatorTok{:}\KeywordTok{max}\NormalTok{(civilw}\OperatorTok{$}\NormalTok{polity2, }\DataTypeTok{na.rm=}\NormalTok{T)), output_vector}\OperatorTok{*}\DecValTok{100}\NormalTok{,}
+     \DataTypeTok{xlab=}\StringTok{"Polity Scores"}\NormalTok{, }\DataTypeTok{ylab=}\StringTok{"% Civil War Onset"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Lab4_Matrix_Algebra_Functions_files/figure-latex/FL1-1.pdf}
+
+In general, this is a pretty hack-y way to calculate this, and you're
+better off using something like \texttt{data.table}, as discussed in lab
+2.
+
+\clearpage
+
+\subsection{\texorpdfstring{for-loops,
+\texttt{next()}}{for-loops, next()}}\label{for-loops-next}
+
+The while loop still requires a lot of attention to indexing. Also
+\ldots{} in many instances all we want to do is increment by 1. So
+programmers put together a ``for loop.''
+
+\texttt{for\ (name\ in\ vector)\ \{execute\ these\ commands\ on\ each\ value\ of\ the\ vector\}}
+whatever you put into the name slot will become a ``local'' variable
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ControlFlowTok{for}\NormalTok{ (monkey }\ControlFlowTok{in} \KeywordTok{c}\NormalTok{(}\StringTok{"spider"}\NormalTok{, }\StringTok{"howler"}\NormalTok{, }\StringTok{"wurst"}\NormalTok{))\{}\KeywordTok{print}\NormalTok{(monkey)\}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "spider"
+## [1] "howler"
+## [1] "wurst"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# or more commonly}
+\ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{1}\OperatorTok{:}\DecValTok{20}\NormalTok{)\{}
+  \KeywordTok{print}\NormalTok{(i)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 1
+## [1] 2
+## [1] 3
+## [1] 4
+## [1] 5
+## [1] 6
+## [1] 7
+## [1] 8
+## [1] 9
+## [1] 10
+## [1] 11
+## [1] 12
+## [1] 13
+## [1] 14
+## [1] 15
+## [1] 16
+## [1] 17
+## [1] 18
+## [1] 19
+## [1] 20
+\end{verbatim}
+
+\subsubsection{Example of for-loops}\label{example-of-for-loops}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{plot}\NormalTok{(}\OtherTok{NULL}\NormalTok{, }\DataTypeTok{xlim=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{100}\NormalTok{), }\DataTypeTok{ylim=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{1}\NormalTok{))}
+\ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{0}\OperatorTok{:}\DecValTok{100}\NormalTok{)\{}\KeywordTok{points}\NormalTok{(i, }\DecValTok{1}\OperatorTok{/}\NormalTok{i)\}}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Lab4_Matrix_Algebra_Functions_files/figure-latex/for2-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{plot}\NormalTok{(}\OtherTok{NULL}\NormalTok{, }\DataTypeTok{xlim=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{11}\NormalTok{), }\DataTypeTok{ylim=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{11}\NormalTok{))}
+\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\OperatorTok{:}\DecValTok{10}\NormalTok{)\{}
+  \KeywordTok{abline}\NormalTok{(}\DataTypeTok{v=}\NormalTok{i)}
+  \KeywordTok{abline}\NormalTok{(}\DataTypeTok{h=}\NormalTok{i)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Lab4_Matrix_Algebra_Functions_files/figure-latex/for2-2.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{output <-}\StringTok{ }\OtherTok{NULL}
+\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\OperatorTok{:}\DecValTok{20}\NormalTok{)\{}
+\NormalTok{  output[i] <-}\StringTok{ }\DecValTok{0}\OperatorTok{+}\NormalTok{i}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(foreign)}
+\NormalTok{civilw <-}\StringTok{ }\KeywordTok{read.dta}\NormalTok{(}\StringTok{"repdata.dta"}\NormalTok{)}
+\NormalTok{output_vector <-}\StringTok{ }\OtherTok{NULL} \CommentTok{# Still need to instantiate the variable or you cannot index it}
+\NormalTok{democracy <-}\StringTok{ }\KeywordTok{sort}\NormalTok{(}\KeywordTok{unique}\NormalTok{(civilw}\OperatorTok{$}\NormalTok{polity2))}
+\ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \KeywordTok{min}\NormalTok{(democracy)}\OperatorTok{:}\KeywordTok{max}\NormalTok{(democracy))\{}
+\NormalTok{  output_vector <-}\StringTok{ }\KeywordTok{c}\NormalTok{(output_vector, }\KeywordTok{mean}\NormalTok{(civilw}\OperatorTok{$}\NormalTok{onset[civilw}\OperatorTok{$}\NormalTok{polity2 }\OperatorTok{==}\StringTok{ }\NormalTok{democracy[i}\OperatorTok{+}\DecValTok{11}\NormalTok{]], }\DataTypeTok{na.rm=}\NormalTok{T)}\OperatorTok{*}\DecValTok{100}\NormalTok{)}
+\NormalTok{\}}
+\KeywordTok{plot}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\KeywordTok{min}\NormalTok{(democracy)}\OperatorTok{:}\KeywordTok{max}\NormalTok{(democracy)),output_vector,}
+     \DataTypeTok{xlab=}\StringTok{"Polity Scores"}\NormalTok{, }\DataTypeTok{ylab=}\StringTok{"% civil War Onset"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Lab4_Matrix_Algebra_Functions_files/figure-latex/for3-1.pdf}
+
+Sometimes you might not want to execute the commands for every element
+in the vector use the next command to skip (you can also use the break)
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{some.odds <-}\StringTok{ }\OtherTok{NULL}
+\ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{1}\OperatorTok{:}\DecValTok{200}\NormalTok{)\{}
+  \ControlFlowTok{if}\NormalTok{ (i}\OperatorTok{%%}\DecValTok{2} \OperatorTok{!=}\StringTok{ }\DecValTok{0}\NormalTok{) \{}
+\NormalTok{    some.odds<-}\KeywordTok{c}\NormalTok{(some.odds, i)}
+\NormalTok{  \} }\ControlFlowTok{else}\NormalTok{ \{ }\ControlFlowTok{next}\NormalTok{ \}}
+\NormalTok{\}}
+\NormalTok{some.odds}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   [1]   1   3   5   7   9  11  13  15  17  19  21  23  25  27  29  31  33
+##  [18]  35  37  39  41  43  45  47  49  51  53  55  57  59  61  63  65  67
+##  [35]  69  71  73  75  77  79  81  83  85  87  89  91  93  95  97  99 101
+##  [52] 103 105 107 109 111 113 115 117 119 121 123 125 127 129 131 133 135
+##  [69] 137 139 141 143 145 147 149 151 153 155 157 159 161 163 165 167 169
+##  [86] 171 173 175 177 179 181 183 185 187 189 191 193 195 197 199
+\end{verbatim}
 
 
 \end{document}
