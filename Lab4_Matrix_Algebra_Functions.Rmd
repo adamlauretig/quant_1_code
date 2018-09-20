@@ -564,6 +564,8 @@ some_odds
 
 ```
 
+\clearpage
+
 ## Functions
 
 We have been using functions this whole time, but we can also make our own. This both helps you keep your code organized, and helps you better understand other people's functions. In particular, functions can be helpful if you have a repetitive serious of tasks to perform on your data.
@@ -642,7 +644,103 @@ gaga_equation <- function(num_rah=2, num_ah=3, num_ga=2, num_la=2){
 }
 gaga_equation()
 gaga_equation(num_rah=5)
-rahs 
 
 ```
-Note that variables created within the function are NOT in the global environment, they don't exist "outside" of the function, and cease to exist when the function stops running.
+Note that variables created within the function are NOT in the global environment, they don't exist "outside" of the function, and cease to exist when the function stops running. In the `gaga_equation`, you can't call `rahs` outside of the function.
+
+
+
+Many of the functions you will write or work with will return lists, like the `summary` command.
+
+```{r, function6}
+library(foreign)
+civilw <- read.dta("repdata.dta")
+
+
+my_summary <- function(varname, data=civilw){
+  attach(civilw)
+  this_mean <- mean(varname, na.rm=T)
+  this_var <- var(varname, na.rm=T)
+  this_quant <- quantile(varname, c(.025, .25, .5, .75, .975), na.rm=T)
+  detach(civilw)
+  return(list(mean=this_mean, variance=this_var, quantiles=this_quant))
+}
+my_summary(polity2)
+polity2_summary <- my_summary(polity2)
+str(polity2_summary)
+
+
+
+```
+
+## 2.6: A note on classes
+If you run `?lm`, doesn't it look like it is returning a list?
+
+```{r, class1}
+library(foreign)
+civilw <- read.dta("repdata.dta")
+
+lm1 <- lm(polity2 ~ gdpen, data=civilw)
+str(lm1) # it looks like a really complicated list
+lm1[[1]] # it acts like a list
+lm1$coefficients
+lm1["coefficients"]
+class(lm1) # But it's not a list
+
+```
+
+This is an object in the "lm" class.  In this case, it works mostly like a list. Mostly this is because some functions will work differently for objects of different classes
+
+```{r, class2}
+print(lm1)
+# print(unclass(lm1)) # that's all of the raw data
+
+
+```
+
+R offers the ability to modify functions based on the class of an object
+```{r, class3}
+
+methods(class = "lm") # these are functions that do something different for the class lm than they would for some different classes
+methods(plot) # These are all the variants of the function plot.  For each of these classes of objects different sets of actual instructions are followed.
+
+```
+
+# 2.7: A note on scope
+As we noted -- local variables are not written into the global environment. Unless you are to the point where you are creating your own namespaces (in which case you can explain all of that to me), you don't need to worry much about scope except to understand that:
+
+```{r, class4}
+
+# What happens in the function, stays in the function
+
+f <-function() {
+  x <- 1 #local x
+  g()
+  return(x)
+}
+g<-function(){
+  x<-2 # local x
+}
+f()
+
+x<-3 # global x
+f()
+x
+
+# HOWEVER: you can pass values downwards in a function chain
+
+f <-function() {
+  x<- 1
+  y<- g(x)
+  return(c(x, y))
+}
+g<-function(x){
+  x+2
+}
+f()
+
+```
+
+
+
+
