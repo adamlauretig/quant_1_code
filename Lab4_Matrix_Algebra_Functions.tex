@@ -696,10 +696,10 @@ other lists!
 \begin{Highlighting}[]
 \NormalTok{vector1 <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{3}\NormalTok{)}
 \NormalTok{gospels <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"matthew"}\NormalTok{,}\StringTok{"mark"}\NormalTok{,}\StringTok{"luke"}\NormalTok{, }\StringTok{"john"}\NormalTok{)}
-\NormalTok{my.matrix <-}\StringTok{ }\KeywordTok{matrix}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\DecValTok{20}\NormalTok{), }\DataTypeTok{nrow=}\DecValTok{4}\NormalTok{)}
-\NormalTok{my.data <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(}\KeywordTok{cbind}\NormalTok{(vap, tv))}
-\NormalTok{my.crazy.list <-}\StringTok{ }\KeywordTok{list}\NormalTok{(vector1, gospels, my.matrix, }\OtherTok{TRUE}\NormalTok{, list.a)}
-\NormalTok{my.crazy.list }\CommentTok{# we can combine anything we want -- we can even include other lists in our lists}
+\NormalTok{my_matrix <-}\StringTok{ }\KeywordTok{matrix}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\DecValTok{20}\NormalTok{), }\DataTypeTok{nrow=}\DecValTok{4}\NormalTok{)}
+\NormalTok{my_data <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(}\KeywordTok{cbind}\NormalTok{(vap, tv))}
+\NormalTok{my_crazy.list <-}\StringTok{ }\KeywordTok{list}\NormalTok{(vector1, gospels, my_matrix, }\OtherTok{TRUE}\NormalTok{, list.a)}
+\NormalTok{my_crazy.list }\CommentTok{# we can combine anything we want -- we can even include other lists in our lists}
 \end{Highlighting}
 \end{Shaded}
 
@@ -793,7 +793,7 @@ What if we want to access the attributes of our list?
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\KeywordTok{str}\NormalTok{(my.crazy.list) }\CommentTok{# the str() function is useful for looking at the basic components }
+\KeywordTok{str}\NormalTok{(my_crazy.list) }\CommentTok{# the str() function is useful for looking at the basic components }
 \end{Highlighting}
 \end{Shaded}
 
@@ -817,7 +817,7 @@ What if we want to access the attributes of our list?
 \CommentTok{# of any complicated object like this}
 \CommentTok{#str() will work with most types of objects}
 
-\KeywordTok{attributes}\NormalTok{(my.crazy.list) }\CommentTok{# lists has attributes, but we haven't set them}
+\KeywordTok{attributes}\NormalTok{(my_crazy.list) }\CommentTok{# lists has attributes, but we haven't set them}
 \end{Highlighting}
 \end{Shaded}
 
@@ -827,7 +827,7 @@ What if we want to access the attributes of our list?
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\KeywordTok{length}\NormalTok{(my.crazy.list) }\CommentTok{# this reports the number of major sub-elements in the list}
+\KeywordTok{length}\NormalTok{(my_crazy.list) }\CommentTok{# this reports the number of major sub-elements in the list}
 \end{Highlighting}
 \end{Shaded}
 
@@ -837,7 +837,7 @@ What if we want to access the attributes of our list?
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\KeywordTok{dim}\NormalTok{(my.crazy.list) }\CommentTok{# this won't work for complicated lists}
+\KeywordTok{dim}\NormalTok{(my_crazy.list) }\CommentTok{# this won't work for complicated lists}
 \end{Highlighting}
 \end{Shaded}
 
@@ -847,8 +847,8 @@ What if we want to access the attributes of our list?
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\KeywordTok{names}\NormalTok{(my.crazy.list) <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"one"}\NormalTok{, }\StringTok{"two"}\NormalTok{, }\StringTok{"three"}\NormalTok{, }\StringTok{"four"}\NormalTok{, }\StringTok{"five"}\NormalTok{)}
-\KeywordTok{str}\NormalTok{(my.crazy.list) }\CommentTok{# now each part of the list has a name attribute}
+\KeywordTok{names}\NormalTok{(my_crazy.list) <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"one"}\NormalTok{, }\StringTok{"two"}\NormalTok{, }\StringTok{"three"}\NormalTok{, }\StringTok{"four"}\NormalTok{, }\StringTok{"five"}\NormalTok{)}
+\KeywordTok{str}\NormalTok{(my_crazy.list) }\CommentTok{# now each part of the list has a name attribute}
 \end{Highlighting}
 \end{Shaded}
 
@@ -869,7 +869,7 @@ What if we want to access the attributes of our list?
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{my.crazy.list}
+\NormalTok{my_crazy.list}
 \end{Highlighting}
 \end{Shaded}
 
@@ -964,8 +964,8 @@ can give each element a name:
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{my.crazy.list <-}\StringTok{ }\KeywordTok{list}\NormalTok{(}\DataTypeTok{one=}\NormalTok{vector1,}\DataTypeTok{two=}\NormalTok{gospels, }\DataTypeTok{three=}\NormalTok{my.matrix, }\DataTypeTok{four=}\OtherTok{TRUE}\NormalTok{, }\DataTypeTok{five=}\NormalTok{list.a)}
-\KeywordTok{str}\NormalTok{(my.crazy.list)}
+\NormalTok{my_crazy.list <-}\StringTok{ }\KeywordTok{list}\NormalTok{(}\DataTypeTok{one=}\NormalTok{vector1,}\DataTypeTok{two=}\NormalTok{gospels, }\DataTypeTok{three=}\NormalTok{my_matrix, }\DataTypeTok{four=}\OtherTok{TRUE}\NormalTok{, }\DataTypeTok{five=}\NormalTok{list.a)}
+\KeywordTok{str}\NormalTok{(my_crazy.list)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -986,7 +986,7 @@ can give each element a name:
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\KeywordTok{names}\NormalTok{(my.crazy.list)}
+\KeywordTok{names}\NormalTok{(my_crazy.list)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1000,7 +1000,7 @@ is using double brackets \texttt{[[]]} to access an element of a list.
 \begin{Shaded}
 \begin{Highlighting}[]
 \CommentTok{# there are several ways to access/add to/subtract from a list}
-\NormalTok{my.crazy.list[[}\DecValTok{1}\NormalTok{]]}
+\NormalTok{my_crazy.list[[}\DecValTok{1}\NormalTok{]]}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1010,7 +1010,7 @@ is using double brackets \texttt{[[]]} to access an element of a list.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{my.crazy.list}\OperatorTok{$}\NormalTok{one}
+\NormalTok{my_crazy.list}\OperatorTok{$}\NormalTok{one}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1020,18 +1020,7 @@ is using double brackets \texttt{[[]]} to access an element of a list.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{my.crazy.list[}\DecValTok{1}\NormalTok{]}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-## $one
-## [1] 1 2 3
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{my.crazy.list[}\StringTok{"one"}\NormalTok{]}
+\NormalTok{my_crazy.list[}\DecValTok{1}\NormalTok{]}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1042,8 +1031,19 @@ is using double brackets \texttt{[[]]} to access an element of a list.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{my.crazy.list}\OperatorTok{$}\NormalTok{dracula <-}\StringTok{ "dracula"}
-\NormalTok{my.crazy.list }\CommentTok{# now we have added another element}
+\NormalTok{my_crazy.list[}\StringTok{"one"}\NormalTok{]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## $one
+## [1] 1 2 3
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{my_crazy.list}\OperatorTok{$}\NormalTok{dracula <-}\StringTok{ "dracula"}
+\NormalTok{my_crazy.list }\CommentTok{# now we have added another element}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1140,7 +1140,7 @@ is using double brackets \texttt{[[]]} to access an element of a list.
 \begin{Shaded}
 \begin{Highlighting}[]
 \CommentTok{# We can repeat this accessing method}
-\NormalTok{my.crazy.list[[}\DecValTok{3}\NormalTok{]][}\DecValTok{1}\NormalTok{,] }\CommentTok{# first row of my.matrix}
+\NormalTok{my_crazy.list[[}\DecValTok{3}\NormalTok{]][}\DecValTok{1}\NormalTok{,] }\CommentTok{# first row of my_matrix}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1150,7 +1150,7 @@ is using double brackets \texttt{[[]]} to access an element of a list.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{my.matrix[}\DecValTok{1}\NormalTok{,]  }\CommentTok{#the same}
+\NormalTok{my_matrix[}\DecValTok{1}\NormalTok{,]  }\CommentTok{#the same}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1164,8 +1164,8 @@ document doesn't compile):
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{my.crazy.list }\OperatorTok{+}\DecValTok{2} \CommentTok{# not so much}
-\NormalTok{my.crazy.list[[}\DecValTok{3}\NormalTok{]] }\OperatorTok{+}\StringTok{ }\DecValTok{2}
+\NormalTok{my_crazy.list }\OperatorTok{+}\DecValTok{2} \CommentTok{# not so much}
+\NormalTok{my_crazy.list[[}\DecValTok{3}\NormalTok{]] }\OperatorTok{+}\StringTok{ }\DecValTok{2}
 \end{Highlighting}
 \end{Shaded}
 

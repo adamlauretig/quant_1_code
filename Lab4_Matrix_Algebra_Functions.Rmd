@@ -142,10 +142,10 @@ We can make all sorts of lists, and can even create lists containing other lists
 
 vector1 <- c(1,2,3)
 gospels <- c("matthew","mark","luke", "john")
-my.matrix <- matrix(c(1:20), nrow=4)
-my.data <- data.frame(cbind(vap, tv))
-my.crazy.list <- list(vector1, gospels, my.matrix, TRUE, list.a)
-my.crazy.list # we can combine anything we want -- we can even include other lists in our lists
+my_matrix <- matrix(c(1:20), nrow=4)
+my_data <- data.frame(cbind(vap, tv))
+my_crazy.list <- list(vector1, gospels, my_matrix, TRUE, list.a)
+my_crazy.list # we can combine anything we want -- we can even include other lists in our lists
 
 ```
 
@@ -153,24 +153,24 @@ What if we want to access the attributes of our list?
 
 ```{r, lists3, echo = TRUE}
 
-str(my.crazy.list) # the str() function is useful for looking at the basic components 
+str(my_crazy.list) # the str() function is useful for looking at the basic components 
 # of any complicated object like this
 #str() will work with most types of objects
 
-attributes(my.crazy.list) # lists has attributes, but we haven't set them
-length(my.crazy.list) # this reports the number of major sub-elements in the list
-dim(my.crazy.list) # this won't work for complicated lists
-names(my.crazy.list) <- c("one", "two", "three", "four", "five")
-str(my.crazy.list) # now each part of the list has a name attribute
-my.crazy.list
+attributes(my_crazy.list) # lists has attributes, but we haven't set them
+length(my_crazy.list) # this reports the number of major sub-elements in the list
+dim(my_crazy.list) # this won't work for complicated lists
+names(my_crazy.list) <- c("one", "two", "three", "four", "five")
+str(my_crazy.list) # now each part of the list has a name attribute
+my_crazy.list
 
 ```
 
 But this can be quite convoluted. Instead, when we create our list, we can give each element a name:
 ```{r, lists4, echo = TRUE, cache = TRUE}
-my.crazy.list <- list(one=vector1,two=gospels, three=my.matrix, four=TRUE, five=list.a)
-str(my.crazy.list)
-names(my.crazy.list)
+my_crazy.list <- list(one=vector1,two=gospels, three=my_matrix, four=TRUE, five=list.a)
+str(my_crazy.list)
+names(my_crazy.list)
 ```
 
 Manipulating lists is similar to other manipulations in R, the new one is using double brackets \texttt{[[]]} to access an element of a list.
@@ -178,17 +178,17 @@ Manipulating lists is similar to other manipulations in R, the new one is using 
 ```{r, lists5, echo = TRUE}
 
 # there are several ways to access/add to/subtract from a list
-my.crazy.list[[1]]
-my.crazy.list$one
-my.crazy.list[1]
-my.crazy.list["one"]
-my.crazy.list$dracula <- "dracula"
-my.crazy.list # now we have added another element
+my_crazy.list[[1]]
+my_crazy.list$one
+my_crazy.list[1]
+my_crazy.list["one"]
+my_crazy.list$dracula <- "dracula"
+my_crazy.list # now we have added another element
 
 
 # We can repeat this accessing method
-my.crazy.list[[3]][1,] # first row of my.matrix
-my.matrix[1,]  #the same
+my_crazy.list[[3]][1,] # first row of my_matrix
+my_matrix[1,]  #the same
 
 ```
 
@@ -196,8 +196,8 @@ However, you cannot do math on lists directly (note that this is set to `eval = 
 
 ```{r, lists6, echo = TRUE, eval = FALSE}
 
-my.crazy.list +2 # not so much
-my.crazy.list[[3]] + 2
+my_crazy.list +2 # not so much
+my_crazy.list[[3]] + 2
 ```
 
 \clearpage
