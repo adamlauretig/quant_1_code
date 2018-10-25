@@ -212,3 +212,108 @@ mean.gg.plot <- function(draws,m,sdev){
 par( mfcol= c(2, 2))
 mean.gg.plot(draws=1000,m=3,sdev=1)
 
+
+####################################################
+# Linear Regression
+####################################################
+library(foreign)
+library(ggplot2)
+library(sandwich)
+library(lmtest)
+library(car)
+
+setwd("~/Dropbox/OSUClasses/Quant_I/Data/")
+setwd("F:/Quant_I/")
+
+vote <- read.dta("votegdp.dta")
+summary(vote)
+
+## Scatterplots
+plot(vote$q2gdp,vote$vote)
+plot(vote$q2gdp,vote$vote,xlab="Q2 Growth",ylab="Vote Share")
+plot(vote$q2gdp,vote$vote,xlab="Q2 Growth",ylab="Vote Share",pch=2)
+plot(vote$q2gdp,vote$vote,xlab="Q2 Growth",ylab="Vote Share",pch=2,col="red")
+plot(vote$q2gdp,vote$vote,xlab="Q2 Growth",ylab="Vote Share",pch=2,col="red",xlim=c(-10,10))
+
+
+## Correlation Coefficent
+
+# single correlation coefficient
+cor(vote$q2gdp,vote$vote)
+# correlation matrix
+cor(vote)
+
+
+### Linear Regression
+
+# by hand
+y_bar <- mean(vote$vote)
+x_bar <- mean(vote$q2gdp)
+s_y <- sd(vote$vote)
+s_x <- sd(vote$q2gdp)
+r <- cor(vote$q2gdp,vote$vote)
+
+b <- r*(s_y/s_x)
+a <- y_bar - b*x_bar
+a
+b
+r_squared <- r^2 # R^2 is just the square of the correlation
+r_squared
+
+lm1 <- lm(vote~q2gdp,data=vote)
+summary(lm1) # main results
+confint(lm1) # confidence intervals for regression coefficients
+confint(lm1, level=0.99) # confidence intervals for regression coefficients
+
+
+names(lm1)
+lm1$coefficients # a and b
+lm1$fitted.values # y_hat, the predicted value
+lm1$residuals # y-y_hat
+
+# Simple diagnostics
+hist(lm1$residuals, breaks=10)
+plot(vote$q2gdp,lm1$residuals)
+plot(lm1)
+
+# some more information
+output <- summary(lm1)
+names(output)
+
+output$sigma # overall regression standard error
+output$r.squared
+
+# Using predict()
+
+predict(lm1) # shows the fitted values
+predict(lm1, interval=c("prediction")) # predicted value with 95% CI
+predict(lm1,newdata=data.frame(q2gdp=c(-10,0,10))) # make predictions
+
+## Visualizing the regression results
+
+#plotting regression line
+plot(x=vote$q2gdp,y=vote$vote,xlab="Q2 Growth",ylab="Vote Share",main="Regression Line of Q2 Growth",type="p")
+abline(lm1)
+
+#"by hand" use of abline to plot line
+plot(x=vote$q2gdp,y=vote$vote,xlab="Q2 Growth",ylab="Vote Share",main="Regression Line of Q2 Growth",type="p")
+summary(lm1)
+#grabbing intercept and slope to put in abline statement below
+lm1$coefficients
+int <- lm1$coefficients[1]
+int
+slope <- lm1$coefficients[2]
+slope
+abline(a=int,b=slope,col="red")
+
+# adding 95% confidence interval
+plot(x=vote$q2gdp,y=vote$vote,xlab="Q2 Growth",ylab="Vote Share",main="Regression Line of Q2 Growth",type="p",ylim=c(35,65))
+abline(lm1)
+newx <- seq(min(vote$q2gdp), max(vote$q2gdp), 0.1)
+a <- predict(lm1, newdata=data.frame(q2gdp=newx), interval="confidence")
+lines(newx,a[,2], lty=3)
+lines(newx,a[,3], lty=3) 
+
+# or
+#qplot(q2gdp,vote,data=vote,geom=c("point","smooth"),method="lm")
+# ^ Following ggplot2 update, this no longer works. (method argument in qplot is now deprecated)
