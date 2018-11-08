@@ -1,0 +1,172 @@
+---
+title: "Untitled"
+author: "Adam Lauretig"
+date: "11/8/2018"
+output: pdf_document
+---
+
+\section{Calculating an MLE}
+\url{https://onlinecourses.science.psu.edu/stat504/node/28}
+
+\textbf{Proofs of most Distributions} \url{http://www.math.uah.edu/stat/point/Likelihood.html}
+
+\subsection{Binomial Distribution}
+\url{http://pages.uoregon.edu/aarong/teaching/G4075_Outline/node13.html}
+
+\begin{enumerate}
+
+\item Suppose that $X$ is an observation from a binomial distribution $ X \sim \operatorname{Bin}(n, p) $ where $n$ is known and $p$ is to be estimated. The likelihood function is
+ $$ L(p;x) \, = \, \frac{n!}{x!(n - x)!} p^{x} (1 - p)^{n-x} $$
+
+\item which, except for the factor $\frac{n!}{x!(n - x)!}$, is identical to the likelihood from n independent Bernoulli trials with $ x \, = \, \sum_{i=1}^{n} x_i$. But since the likelihood function is regarded as a function only of the parameter $p$, the factor $\frac{n!}{x!(n - x)!}$ is a fixed constant and does not affect the MLE. Thus the MLE is again $ \hat p \, = \, \frac{x}{n}$ the sample proportion of successes. 
+
+\item You get the same value by maximizing the \textit{binomial loglikelihood function} $$ l(p;x) \, = \, k + x \operatorname{log} p + (n - x) \operatorname{log} (1 - p) $$
+
+\item We take the derivative of this function with respect to $p$.
+
+$$ \frac{\partial \log L(p)}{\partial p}=\frac{x}{p}-\frac{n-x}{1-p} $$
+
+\item Additionally, the second derivative can be written as (note: $\theta$ and $p$ are interchangeable in this context):  
+$$ l''(\theta) \, = \, - \frac{x}{\theta^2} - \frac{n - x}{(1 - \theta)^2}$$
+
+
+When this function (the first derivative) equals zero, we will have either a minimum or a maximum. So solve for $p$. 
+
+$$0  \, =  \, \frac{x}{p} - \frac{n-x}{1-p}$$ 
+$$ \frac{n - x}{1- p} \,	= \, \frac{x}{p}$$	 
+$$p(n-x) \, = \,  x(1 - p)$$	 
+$$ pn-px \, = \,  x - px$$ 
+$$ pn \, = \,  x$$
+$$ p \, = \,	 \frac{x}{n}$$
+
+\end{enumerate}
+
+
+\section{Exponential Applied Example}
+
+  Given iid data ${x_{1}, \cdots, x_{n}}$ from an exponential distribution ${\theta e^{-{\theta}x}}$
+\subsection{The Likelihood Funtion}
+$$ f(x_{i} \cdots x_{n}|{\mathbf{\theta}}) = \prod_{i=1}^n f(x_{i}|{\theta e^{-{\theta}x_{i}}}) = L({\mathbf{\theta}}|{\mathbf{x}}) $$   
+   ${\theta}$ is the parameter/set of parameters we want to find the maximum likelihood estimator for, given sample of values \textbf{x}.  f is the PDF.
+   
+  \subsection{Log Likelihood}
+     We now take lnL to transform the ${\prod}$ into a ${\sum}$, which will make the math we will have to do later easier.\\
+    
+  Starting with taking the log of the original likelihood function:
+$$ = ln ({\theta e^{-{\theta}x_{i}}}) $$
+     Break it in to more manageable sections (in accordance with logarithm properties), the n in front of the ${\theta}$ is because ${\theta}$ will be summed n times :
+      $$ = n ln(\theta) + ln(e^{-{\theta} {\sum_{i=1}^n}x_{i}})  
+      $$\\
+        Now, the ${ln(e)}$ will cancel (logarithm properties):
+  $$ = n ln(\theta) - {\theta} {{\sum_{i=1}^n}x_{i}}$$\\
+        leaving us with our log-likelihood.
+   
+    \subsection{Score Function - First Derivative of the Log Likelihood}
+   We now take the first derivative of the log likelihood with respect to ${\theta}$, in order to find maximum likelihood:\\
+    
+    $$ \frac{\partial{n ln(\theta) - {\theta} {{\sum_{i=1}^n}x_{i}}}}{\partial{\theta}} $$\\
+Expanded out (but prior to simplification) this looks like:
+$$ = \left({\frac{\partial{n}}{\partial{\theta}}}ln({\theta})\right)+
+\left({n}\left({\frac{1}{\theta}}\right)\right) - 
+\left[\left(\left(
+\frac{\partial{\theta}}{\partial{\theta}}\right
+) {\sum_{i=1}^n}x_{i}\right) +
+\left(\left(\frac{\partial{\sum_{i=1}^n}x_{i}}{\partial{\theta}}\right){\theta}\right)\right]
+$$ \\
+Which simplifies to:
+$$ \left({\frac{n}{{\theta}}}\right) - \sum_{i=1}^n x_{i} $$\\
+
+\subsection{The MLE}
+Now we solve for ${\hat{\theta}}$, beginning with setting the score function = 0
+\begin{equation}
+0 = \left({\frac{n}{{\hat{\theta}}}}\right) - \sum_{i=1}^n x_{i}
+\end{equation}\\
+We want to isolate ${\hat{\theta}}$
+ \begin{equation}
+ \hat{\theta} = \frac{n}{\sum_{i=1}^n x_{i}}
+ \end{equation}\\
+ Thus, as an estimator:
+ \begin{equation}
+ \hat{\theta} = \frac{n}{\sum_{i=1}^n x_{i}}
+ \end{equation}\\
+ 
+ This is the generic estimator for an exponential distribution, though one could replace ${\hat{\theta}}$ with ${\hat{\lambda}}$ if you so desired.
+\subsection{Observed Fisher Information}
+ The Observed Fisher Information is the curvature of at the MLE, which tells us our certainty in out MLE for a given distribution.  It is the inverse of the second derivative of the log-likelihood:
+  $$ I(\hat{\theta}) = - \frac{\partial^{2}}{\partial{\theta}^{2}} lnL(\hat{\theta})
+  $$\\
+  
+ So, for the exponential distribution, we take the derivative of ${\hat{\theta}}$ we found above (only before we manipulated it to solve for ${\hat{\theta}}$, starting with:
+$$ = {\frac{\partial{\left({\frac{n}{{\hat{\theta}}}}\right) - \sum_{i=1}^n x_{i}}} {\partial{\hat{\theta}}}}$$\\
+  
+ which results in:
+   
+$$ = \left({n}{\frac{\partial{\hat{\theta}}^{-1}}{\partial{\hat{\theta}}}}\right)+\left({\hat{\theta}}{\frac{\partial{n}}{\partial{\hat{\theta}}}}\right) $$\\
+  
+  which simplifies to:
+   
+   $$ 0 = - \frac{n}{\theta^{2}} $$\\
+and then we take the inverse:
+   $$ \frac{n}{\hat{\theta^{2}}} $$\\
+ which is the generic Observed Fisher Information for an exponential distribution.
+
+\clearpage
+
+# Hand-Rolling a Poisson MLE in R
+
+```{r, poisson_mle}
+
+# generate our data
+set.seed(216)
+n <- 100
+b0 <- 2
+b1 <- -1.9
+x <- rnorm(n)
+lp <- exp(b0 + x*b1)
+y <- rpois(n, lambda =  lp)
+
+loglik_poisson <- function(X, par,y)
+{
+  beta <- par
+  # the deterministic part of the model:
+  lambda <- exp(X%*%beta)
+  # and here comes the negative log-likelihood of the whole dataset, given the
+  # model:
+  LL <- -sum(dpois(y, lambda, log = TRUE))
+  return(LL)
+}
+par <- c(rep(rnorm(1), 2))
+X <- cbind(1, x)
+pois_out<- optim(par = par, fn = loglik_poisson, y = y, X = X, hessian = TRUE)
+pois_out
+
+```
+
+\clearpage
+
+# Bayesian Estimation
+
+```{r, bayesian_poisson}
+library(rstanarm) # bayesian regression models in R
+# generate our data
+set.seed(216)
+n <- 1000
+b0 <- 2
+b1 <- -1.9
+eps <- rnorm(n, 0, 1)
+x <- rnorm(n)
+lp <- exp(b0 + x*b1 + eps)
+y <- rpois(n, lambda =  lp)
+
+df <- data.frame(y = y, x = x)
+
+formula_to_use <- as.formula("y~x")
+
+m1 <- stan_glm(formula_to_use, family = poisson(), data = df, prior = normal(0, 10), algorithm = "sampling") # we'll need to specify a prior on our coefficient. Here, we'll use Hamiltonian Monte Carlo sampling to estimate our model
+summary(m1)
+
+# compare to 
+m2 <- glm(formula_to_use, family = poisson(), data = df)
+summary(m2)
+```
+
