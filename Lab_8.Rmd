@@ -1,5 +1,5 @@
 ---
-title: "Untitled"
+title: "Lab 8, MLE"
 author: "Adam Lauretig"
 date: "11/8/2018"
 output: pdf_document
