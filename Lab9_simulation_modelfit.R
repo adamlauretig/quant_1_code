@@ -106,13 +106,12 @@ betas[, 2:ncol(betas)] <- betas[, 2:ncol(betas)] * beta_to_use
 tmp <- X %*% t(betas) # before we include our errors
 
 # errors are more complicated here
-n <- rep(1:50, 200)
+n <- rep(1:1000, 10)
 sigma_sq <- n^1.3
 error <- rnorm(n = hyperpop_size, mean = 0, sd = sqrt(sigma_sq)) 
 Y <- tmp + error
 hyper_pop_data_het <- data.frame(Y = Y, X[, 2:ncol(X)])
 
-# when we know the DGP, we don't need a big N
 m1 <- lm(Y~ X1 + X2 + X3 + X4 + X5 + X6 + X7 + X8 + X9 + X10, 
   data = generate_observed_sample(10, hyper_pop_data_het))
 summary(m1)
@@ -141,4 +140,27 @@ coeftest(m3,vcovHC(m3,type="HC3"))
 coeftest(m4,vcovHC(m4,type="HC3"))
 
 
+## Outliers and high-leverage points ---- 
+# going to cheat a little here, and just use a subset of our data
+outlier_data1 <- generate_observed_sample(100)
+outlier_data2 <- generate_observed_sample(500)
 
+# replace 5% of the data in X1 w/high leverage points
+outlier_data1[sample(100, size = .05 * 100, replace = F), 1] <- runif(.05 * 100, min = 200, max = 300)
+outlier_data2[sample(500, size = .05 * 500, replace = F), 1] <- runif(.05 * 500, min = 200, max = 300)
+
+m1 <- lm(Y~ X1 + X2 + X3 + X4 + X5 + X6 + X7 + X8 + X9 + X10, outlier_data1)
+summary(m1)
+m2 <- lm(Y~ X1 + X2 + X3 + X4 + X5 + X6 + X7 + X8 + X9 + X10, outlier_data2)
+summary(m2)
+plot(m1)
+plot(m2)
+
+
+
+m3 <- lm(Y~ X1 + X2 + X3, outlier_data1)
+summary(m3)
+m4 <- lm(Y~ X1 + X2 + X3, outlier_data2)
+summary(m4)
+plot(m3)
+plot(m4)
