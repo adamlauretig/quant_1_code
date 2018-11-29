@@ -4,7 +4,7 @@
 ##################################################################
 ### 2SLS Estimation/Instrumental Variables
 ##################################################################
-
+library(data.table)
 library(foreign)
 data <- read.dta("mss_repdata.dta")
 
@@ -124,10 +124,10 @@ matched_data <- match.data(matched)
 # match.data function returns subset of original data (processed with matchit
 # command in code above), with only the matched units included
 library(Zelig)
-matched.model <- Zelig::zelig(diff ~ treat, model = "ls", data = matched_data)
-treat0 <- Zelig::setx(matched.model, treat = 0)
-treat1 <- Zelig::setx(matched.model, treat = 1)
-effect <- Zelig::sim(matched.model, x = treat0, x1 = treat1)
+matched_model <- Zelig::zelig(diff ~ treat, model = "ls", data = matched_data)
+treat0 <- Zelig::setx(matched_model, treat = 0)
+treat1 <- Zelig::setx(matched_model, treat = 1)
+effect <- Zelig::sim(matched_model, x = treat0, x1 = treat1)
 
 summary(effect)
 # The effect of interest is the First differences
@@ -135,9 +135,31 @@ summary(effect)
 # expected values given x (control)
 
 # For a non-simulation approach:
-model <- lm(diff ~ treat, data = matched.data)
+model <- lm(diff ~ treat, data = matched_data)
 summary(model)
 
-# an alternate approach to matching
+# an alternate approach to matching: goal optimize balance between treated and control
 install.packages("CBPS")
 library(CBPS)
+
+
+cbps_match <- CBPS(treat ~ lpop2000 + poverty + tariq + lelev + iso + lnn + 
+  garrison + reb, data = data2, twostep = FALSE, ATT = 0)
+summary(cbps_match)
+estimate_ate <- data.table(pscores = cbps_match$fitted.values, 
+  ipw_weights = cbps_match$weights, diff = data2$diff, treat = data2$treat)
+m_out <- matchit(treat ~ pscores, method = "nearest", 
+				 data = estimate_ate, replace = FALSE)
+summary(m_out)
+matched_data2 <- match.data(m_out)
+summary(lm(diff ~ treat, data = matched_data2))
+
+### 
+# We can also weight our observations by the inverse probability of treatment
+# CBPS estimates this along with the propensity score
+summary(lm(diff ~ treat, data = estimate_ate, weights = ipw_weights))
+summary(lm(diff ~ treat, data = matched_data2, weights = ipw_weights))
+# slightly different point estimates
+
+
+
